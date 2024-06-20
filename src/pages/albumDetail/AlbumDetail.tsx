@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
@@ -7,18 +7,26 @@ import { useGetAlbumDetailQuery } from "./utilities/service/albumDetail.service"
 import { ClockIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { extractColors } from "extract-colors";
 import { setMusicList } from "../../features/musicList/musicList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { FileRoutes } from "../../core/utilities/constants/core.constants";
 
 function AlbumDetail() {
   const { albumId } = useParams();
   const { data: albumDataRes } = useGetAlbumDetailQuery(albumId!);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const authState = useSelector((state: any) => state.Auth);
 
   const [albumData, setAlbumData] = useState<any>(null);
   const [albumTracks, setAlbumTracks] = useState<any>(null);
   const [extractedColors, setExtractedColors] = useState<string[]>([]);
 
   const handleClick = (index: number) => {
+    if (!authState.authData) {
+      navigate(FileRoutes.LOGIN);
+      return;
+    }
     const selectedMusic = albumTracks[index];
     const dispatchObj = {
       currentlyPlaying: {

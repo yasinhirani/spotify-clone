@@ -16,6 +16,8 @@ function Search() {
 
   const dispatch = useDispatch();
 
+  const authState = useSelector((state: any) => state.Auth);
+
   const [browseCategories, setBrowseCategories] = useState<any>(null);
 
   const bgColors = [
@@ -27,6 +29,10 @@ function Search() {
   ];
 
   const handleClick = (index: number) => {
+    if (!authState.authData) {
+      navigate(FileRoutes.LOGIN);
+      return;
+    }
     const selectedMusic = searchState.searchResult.tracks.items[index];
     const dispatchObj = {
       currentlyPlaying: {
@@ -57,8 +63,8 @@ function Search() {
     }
     return () => {
       dispatch(setSearchResult(null));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [browseCategoriesRes]);
 
   if (!browseCategories) {
@@ -146,10 +152,24 @@ function Search() {
               {searchState.searchResult.artists.items.map((artist: any) => {
                 return (
                   <div key={artist.id}>
-                    <figure className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden">
-                      <img src={artist.images[0]?.url} alt={artist.name} />
-                    </figure>
-                    <button className="font-medium text-lg text-white mt-3 whitespace-nowrap w-full overflow-hidden overflow-ellipsis" onClick={() => navigate(`${FileRoutes.ARTIST}/${artist.id}`)}>
+                    {artist.images.length > 0 ? (
+                      <figure className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden">
+                        <img src={artist.images[0]?.url} alt={artist.name} />
+                      </figure>
+                    ) : (
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full flex justify-center items-center font-semibold text-3xl bg-gray-400">
+                        {artist.name
+                          .split(" ")
+                          .map((name: string) => name.charAt(0))
+                          .join("")}
+                      </div>
+                    )}
+                    <button
+                      className="font-medium text-lg text-white mt-3 whitespace-nowrap w-full overflow-hidden overflow-ellipsis text-left"
+                      onClick={() =>
+                        navigate(`${FileRoutes.ARTIST}/${artist.id}`)
+                      }
+                    >
                       {artist.name}
                     </button>
                     <h6 className="font-medium text-sm text-gray-400 capitalize">

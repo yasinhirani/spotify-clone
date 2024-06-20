@@ -1,26 +1,39 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../../../../core/utilities/service/axios.service";
 
 const sectionDetailApi = createApi({
   reducerPath: "SectionDetail",
   baseQuery: axiosBaseQuery({
-    baseUrl: "https://spotify-scraper.p.rapidapi.com",
+    baseUrl: "http://localhost:8080/api",
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSectionOverview: builder.query<any, string>({
-      query: (id: string) => ({
-        url: `/v1/home/section?sectionId=${id}&region=IN`,
+      query: (name: string) => ({
+        url: `/homepage/detail/${name}`,
         method: "GET",
-        headers: {
-          "x-rapidapi-key": import.meta.env.VITE_X_RAPIDAPI_KEY,
-          "x-rapidapi-host": import.meta.env.VITE_X_RAPIDAPI_HOSt,
-        },
+      }),
+    }),
+  }),
+});
+
+const sectionPlaylistDetailApi = createApi({
+  reducerPath: "SectionPlaylistDetail",
+  baseQuery: axiosBaseQuery({
+    baseUrl: import.meta.env.VITE_SPOTIFY_BASE_URL,
+  }),
+  keepUnusedDataFor: 14400,
+  endpoints: (builder) => ({
+    getSectionPlaylistOverview: builder.query<any, any>({
+      query: () => ({
+        url: `/v1/browse/featured-playlists?locale=en_IN&limit=20&offset=0`,
+        method: "GET",
       }),
     }),
   }),
 });
 
 export const { useGetSectionOverviewQuery } = sectionDetailApi;
-export default sectionDetailApi;
+export const { useGetSectionPlaylistOverviewQuery } = sectionPlaylistDetailApi;
+export { sectionDetailApi, sectionPlaylistDetailApi };

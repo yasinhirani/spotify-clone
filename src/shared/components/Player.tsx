@@ -37,6 +37,7 @@ function Player() {
 
   const playPreviousSong = () => {
     setUrl("");
+    audioRef.current.currentTime = 0;
     const indexOfCurrentSong = musicState.musicList.findIndex(
       (music: any) => music.id === musicState.currentlyPlaying.id
     );
@@ -60,6 +61,7 @@ function Player() {
 
   const playNextSong = () => {
     setUrl("");
+    audioRef.current.currentTime = 0;
     const indexOfCurrentSong = musicState.musicList.findIndex(
       (music: any) => music.id === musicState.currentlyPlaying.id
     );
@@ -73,6 +75,11 @@ function Player() {
     } else {
       return;
     }
+  };
+
+  const skipMusic = (e: any) => {
+    const { duration } = audioRef.current;
+    audioRef.current.currentTime = (e.target.value * duration) / 100;
   };
 
   const setMusicUrl = async (musicData: any) => {
@@ -148,12 +155,28 @@ function Player() {
           </button>
         </div>
         {/* Start Progress bar */}
-        <div className="h-1 w-full bg-white bg-opacity-30 rounded-3xl overflow-hidden my-5 md:my-0 md:mt-5">
+        {/* <div
+          className="h-1 w-full bg-white bg-opacity-30 rounded-3xl overflow-hidden my-5 md:my-0 md:mt-5 cursor-pointer"
+          onClick={(e) => console.log(e)}
+        >
           <div
             className="bg-white h-full"
             style={{ width: `${progressValue}%` }}
           />
-        </div>
+        </div> */}
+        <input
+          type="range"
+          name="progress"
+          id="progress"
+          min={0}
+          max={100}
+          value={progressValue}
+          style={{
+            background: `linear-gradient(to right, #ffffff ${progressValue}%, rgba(255, 255, 255, 0.3) ${progressValue}%)`,
+          }}
+          className="h-1 my-5 md:my-0 md:mt-5"
+          onChange={skipMusic}
+        />
         {/* End Progress bar */}
       </div>
       {/* End controls and progress bar */}
