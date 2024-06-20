@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetArtistDetailQuery,
   useGetArtistPopularTracksQuery,
@@ -8,11 +8,15 @@ import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
 import { setMusicList } from "../../features/musicList/musicList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { FileRoutes } from "../../core/utilities/constants/core.constants";
 
 function ArtistDetail() {
   const { artistId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const authState = useSelector((state: any) => state.Auth);
 
   const { data: artistDataRes } = useGetArtistDetailQuery(artistId!);
   const { data: artistPopularTrackRes } = useGetArtistPopularTracksQuery(
@@ -24,6 +28,10 @@ function ArtistDetail() {
   const [seeMore, setSeeMore] = useState<boolean>(false);
 
   const handleClick = (index: number) => {
+    if (!authState.authData) {
+      navigate(FileRoutes.LOGIN);
+      return;
+    }
     const selectedMusic = artistPopularTracks[index];
     const dispatchObj = {
       currentlyPlaying: {
@@ -32,7 +40,7 @@ function ArtistDetail() {
         artist: selectedMusic.artists.map((artist: any) => artist.name),
         duration_ms: selectedMusic.duration_ms,
         preview_url: selectedMusic.preview_url,
-        image: selectedMusic.album.images[0].url
+        image: selectedMusic.album.images[0].url,
       },
       musicList: artistPopularTracks.map((track: any) => {
         return {

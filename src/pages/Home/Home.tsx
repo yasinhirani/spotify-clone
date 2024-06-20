@@ -4,20 +4,43 @@ import HomePageListCard from "../../shared/components/HomePageListCard";
 import Loader from "../../shared/components/Loader";
 import { useNavigate } from "react-router-dom";
 import { FileRoutes } from "../../core/utilities/constants/core.constants";
-import { useGetHomePageDataQuery } from "./utilities/service/home.service";
+import {
+  useGetFeaturedPlaylistDataQuery,
+  useGetHomePageDataQuery,
+} from "./utilities/service/home.service";
 
 function Home() {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetHomePageDataQuery();
+  const { data: homepageDataRes, isLoading } = useGetHomePageDataQuery();
+  const { data: featuredPlaylistDataRes } = useGetFeaturedPlaylistDataQuery();
   const [homepageData, setHomepageData] = useState<any>(null);
 
   useEffect(() => {
-    if (data) {
-      setHomepageData(data.sections.items);
+    if (homepageDataRes && featuredPlaylistDataRes) {
+      const featuredPlaylist = {
+        id: 5,
+        title: featuredPlaylistDataRes.message,
+        type: "playlist",
+        contents: {
+          items: featuredPlaylistDataRes.playlists.items.map((item: any) => {
+            return {
+              id: item.id,
+              name: item.name,
+              type: item.type,
+              images: [
+                {
+                  url: item.images[0].url,
+                },
+              ],
+            };
+          }),
+        },
+      };
+      setHomepageData([featuredPlaylist, ...homepageDataRes.data.items]);
     }
-  }, [data]);
+  }, [homepageDataRes, featuredPlaylistDataRes]);
 
-  if (isLoading) {
+  if (isLoading || !featuredPlaylistDataRes) {
     return <Loader />;
   }
 
@@ -25,7 +48,7 @@ function Home() {
     <main className="flex-grow mt-10 sm:mt-28 px-8 pb-8 space-y-10 w-full max-w-[1440px] mx-auto">
       {homepageData &&
         homepageData.length > 0 &&
-        homepageData.slice(0, 5).map((item: any) => {
+        homepageData.map((item: any) => {
           return (
             <div key={item.id}>
               <div className="flex justify-between items-center space-x-5">
@@ -35,9 +58,7 @@ function Home() {
                 <button
                   className="text-white text-sm"
                   onClick={() =>
-                    navigate(
-                      `${FileRoutes.SECTION_CONTENT}/${item.type}/${item.id}`
-                    )
+                    navigate(`${FileRoutes.SECTION_CONTENT}/${item.type}`)
                   }
                 >
                   see all
@@ -48,19 +69,7 @@ function Home() {
                   return (
                     <HomePageListCard
                       key={listItem.id}
-                      imageUrl={
-                        Object.prototype.hasOwnProperty.call(
-                          listItem,
-                          "visuals"
-                        )
-                          ? listItem.visuals.avatar[0].url
-                          : Object.prototype.hasOwnProperty.call(
-                              listItem,
-                              "cover"
-                            )
-                          ? listItem.cover[0].url
-                          : listItem.images[0][0].url
-                      }
+                      imageUrl={listItem.images[0].url}
                       title={listItem.name}
                       type={listItem.type}
                       id={listItem.id}

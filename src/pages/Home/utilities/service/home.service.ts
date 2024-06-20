@@ -5,22 +5,35 @@ import axiosBaseQuery from "../../../../core/utilities/service/axios.service";
 const homepageApi = createApi({
   reducerPath: "HomePage",
   baseQuery: axiosBaseQuery({
-    baseUrl: "https://spotify-scraper.p.rapidapi.com",
+    baseUrl: "http://localhost:8080/api",
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
     getHomePageData: builder.query<any, void>({
       query: () => ({
-        url: "/v1/home?region=IN",
+        url: "/homepage",
         method: "GET",
-        headers: {
-          "x-rapidapi-key": import.meta.env.VITE_X_RAPIDAPI_KEY,
-          "x-rapidapi-host": import.meta.env.VITE_X_RAPIDAPI_HOSt,
-        },
+      }),
+    }),
+  }),
+});
+
+const featuredPlaylistApi = createApi({
+  reducerPath: "FeaturedPlaylist",
+  baseQuery: axiosBaseQuery({
+    baseUrl: import.meta.env.VITE_SPOTIFY_BASE_URL,
+  }),
+  keepUnusedDataFor: 14400,
+  endpoints: (builder) => ({
+    getFeaturedPlaylistData: builder.query<any, void>({
+      query: () => ({
+        url: "/v1/browse/featured-playlists?locale=en_IN&limit=5&offset=0",
+        method: "GET",
       }),
     }),
   }),
 });
 
 export const { useGetHomePageDataQuery } = homepageApi;
-export default homepageApi;
+export const { useGetFeaturedPlaylistDataQuery } = featuredPlaylistApi;
+export { homepageApi, featuredPlaylistApi };

@@ -7,6 +7,9 @@ import ArtistDetail from "./pages/artistDetail/ArtistDetail";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import PlaylistDetail from "./pages/playlistDetail/PlaylistDetail";
 import Search from "./pages/search/Search";
+import Login from "./core/components/auth/Login";
+import Signup from "./core/components/auth/Signup";
+import VerifyEmail from "./core/components/auth/VerifyEmail";
 
 function AppRoutes() {
   const routes = createBrowserRouter([
@@ -19,7 +22,7 @@ function AppRoutes() {
           element: <Home />,
         },
         {
-          path: `${FileRoutes.SECTION_CONTENT}/:sectionName/:sectionId`,
+          path: `${FileRoutes.SECTION_CONTENT}/:sectionName`,
           element: <SectionListing />,
         },
         {
@@ -40,9 +43,9 @@ function AppRoutes() {
         },
       ],
     },
-    { path: FileRoutes.LOGIN, element: <></> },
-    { path: FileRoutes.REGISTER, element: <></> },
-    { path: FileRoutes.VERIFY_EMAIL, element: <></> },
+    { path: FileRoutes.LOGIN, element: <Login /> },
+    { path: FileRoutes.REGISTER, element: <Signup /> },
+    { path: FileRoutes.VERIFY_EMAIL, element: <VerifyEmail /> },
   ]);
   return <RouterProvider router={routes} />;
 }

@@ -87,3 +87,34 @@ body {
     background-size: 20% 100%, 20% 100%, 20% 100%;
   }
 }
+
+/* Style override for input range */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: none;
+  transition: .2s ease-in-out;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  border: none;
+  transition: .2s ease-in-out;
+}

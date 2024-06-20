@@ -1,24 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
 import { ClockIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useGetPlaylistDetailQuery } from "./utilities/service/playlistDetail.service";
 import { extractColors } from "extract-colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMusicList } from "../../features/musicList/musicList";
+import { FileRoutes } from "../../core/utilities/constants/core.constants";
 
 function PlaylistDetail() {
   const { playlistId } = useParams();
   const { data: playlistDatRes } = useGetPlaylistDetailQuery(playlistId!);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const authState = useSelector((state: any) => state.Auth);
 
   const [playlistData, setPlaylistData] = useState<any>(null);
   const [playlistTracks, setPlaylistTracks] = useState<any>(null);
   const [extractedColors, setExtractedColors] = useState<string[]>([]);
 
   const handleClick = (index: number) => {
+    if (!authState.authData) {
+      navigate(FileRoutes.LOGIN);
+      return;
+    }
     const selectedMusic = playlistTracks[index];
     const dispatchObj = {
       currentlyPlaying: {
@@ -70,7 +78,7 @@ function PlaylistDetail() {
       {/* Start Artist Details */}
       <div className="pt-10 bg-opacity-40">
         <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 sm:mt-20">
-          <figure className="w-56 h-56 rounded-md overflow-hidden">
+          <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
             <img
               src={playlistData.images[0].url}
               alt={playlistData.name}
