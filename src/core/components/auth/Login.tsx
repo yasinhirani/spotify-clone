@@ -6,12 +6,14 @@ import { useDispatch } from "react-redux";
 import { setAuthData } from "../../../features/auth/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { FileRoutes } from "../../utilities/constants/core.constants";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login] = useLoginMutation();
+  const [login, { data: loginRes }] = useLoginMutation();
 
   const initialValues = {
     email: "",
@@ -19,17 +21,23 @@ function Login() {
   };
 
   const handleSubmit = async (values: any) => {
-    await login(values).then((res: any) => {
-      if (res.data.data.emailVerified) {
-        dispatch(setAuthData(res.data));
+    await login(values);
+  };
+
+  useEffect(() => {
+    if (loginRes) {
+      if (loginRes.data.emailVerified) {
+        toast.success(loginRes.message);
+        dispatch(setAuthData(loginRes.data));
         navigate(FileRoutes.HOME);
-        localStorage.setItem("user", JSON.stringify(res.data.data));
+        localStorage.setItem("user", JSON.stringify(loginRes.data));
       } else {
-        localStorage.setItem("email", res.data.data.email);
+        localStorage.setItem("email", loginRes.data.email);
         navigate(FileRoutes.VERIFY_EMAIL);
       }
-    });
-  };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginRes]);
 
   return (
     <div className="main-bg flex justify-center items-center h-full">
@@ -76,7 +84,10 @@ function Login() {
                     </p>
                   ) : null}
                 </div>
-                <button className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors">
+                <button
+                  type="submit"
+                  className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors"
+                >
                   Login
                 </button>
                 <p className="text-center text-white">

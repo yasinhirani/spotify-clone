@@ -4,6 +4,7 @@ import { signupValidations } from "../../utilities/validations/auth.validations"
 import { useSignupMutation } from "../../utilities/service/core.service";
 import { Link, useNavigate } from "react-router-dom";
 import { FileRoutes } from "../../utilities/constants/core.constants";
+import toast from "react-hot-toast";
 
 function Signup() {
   const navigate = useNavigate();
@@ -23,7 +24,8 @@ function Signup() {
       email: values.email,
       password: values.password,
     }).then((res: any) => {
-      localStorage.setItem("email", res.data.email);
+      toast.success(res.data.message);
+      localStorage.setItem("email", values.email);
       navigate(FileRoutes.VERIFY_EMAIL);
     });
   };
@@ -106,7 +108,7 @@ function Signup() {
                     </p>
                   ) : null}
                 </div>
-                <button className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors">
+                <button type="submit" className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors">
                   Signup
                 </button>
                 <p className="text-center text-white">

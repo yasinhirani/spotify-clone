@@ -54,7 +54,9 @@ function PlaylistDetail() {
   useEffect(() => {
     if (playlistDatRes) {
       setPlaylistData(playlistDatRes);
-      setPlaylistTracks(playlistDatRes.tracks.items.filter((track: any) => track.track));
+      setPlaylistTracks(
+        playlistDatRes.tracks.items.filter((track: any) => track.track)
+      );
       extractColors(playlistDatRes.images[0].url, {
         crossOrigin: "anonymous",
       }).then((colors) => setExtractedColors(colors.map((color) => color.hex)));
@@ -68,11 +70,7 @@ function PlaylistDetail() {
     <div
       className="flex-grow space-y-10"
       style={{
-        background:
-          extractedColors[extractedColors.length - 1] === "#000000" ||
-          extractedColors[extractedColors.length - 1] === "#ffffff"
-            ? extractedColors[1]
-            : extractedColors[extractedColors.length - 1],
+        background: extractedColors[1]
       }}
     >
       {/* Start Artist Details */}
@@ -87,7 +85,9 @@ function PlaylistDetail() {
           </figure>
           <div className="text-white mt-5 sm:mt-0">
             <span className="text-base capitalize">{playlistData.type}</span>
-            <h2 className="font-bold text-4xl md:text-8xl">{playlistData.name}</h2>
+            <h2 className="font-bold text-4xl md:text-8xl">
+              {playlistData.name}
+            </h2>
             <p className="mt-4 text-sm">{playlistData.description}</p>
           </div>
         </div>

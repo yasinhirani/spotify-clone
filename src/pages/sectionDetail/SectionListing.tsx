@@ -12,12 +12,12 @@ function SectionListing() {
   const { sectionName } = useParams();
 
   const { data: sectionDetailRes } = useGetSectionOverviewQuery(sectionName!, {
-    skip: !sectionName || sectionName === "playlist",
+    skip: sectionName === "playlist",
   });
 
   const { data: sectionPlaylistDetailRes } = useGetSectionPlaylistOverviewQuery(
     {
-      skip: !sectionName || sectionName !== "playlist",
+      skip: sectionName !== "playlist",
     }
   );
 

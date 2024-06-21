@@ -26,28 +26,28 @@ const coreApi = createApi({
     }),
     signup: builder.mutation<any, any>({
       query: (data: any) => ({
-        url: "http://localhost:8080/api/user/signup",
+        url: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api/user/signup`,
         method: "POST",
         data,
       }),
     }),
     login: builder.mutation<any, any>({
       query: (data: any) => ({
-        url: "http://localhost:8080/api/user/login",
+        url: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api/user/login`,
         method: "POST",
         data,
       }),
     }),
     sendVerificationEmail: builder.mutation<any, string>({
       query: (email: string) => ({
-        url: "http://localhost:8080/api/user/sendVerificationEmail",
+        url: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api/user/sendVerificationEmail`,
         method: "POST",
         data: { email },
       }),
     }),
     createSubscription: builder.query<any, void>({
       query: () => ({
-        url: "http://localhost:8080/api/create-subscription",
+        url: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api/create-subscription`,
         method: "GET",
       }),
     }),
