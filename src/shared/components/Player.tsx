@@ -11,6 +11,7 @@ import { setMusicList } from "../../features/musicList/musicList";
 
 function Player() {
   const musicState = useSelector((state: any) => state.MusicList);
+
   const { data: musicData } = useGetMusicDataQuery(
     musicState.currentlyPlaying.name,
     { skip: !musicState.currentlyPlaying }
@@ -94,10 +95,29 @@ function Player() {
     }, 100);
   };
 
+  // const compareArtists = (songObj: any) => {
+  //   const artistList = [...songObj.artists.primary];
+
+  //   const artistsNames = artistList.map((artist) => artist.name);
+
+  //   artistsNames.forEach((artist: any) => {
+  //     if (musicState.currentlyPlaying.artist.includes(artist)) {
+  //       return true;
+  //     }
+  //   });
+
+  //   return false;
+  // };
+
   useEffect(() => {
     setUrl("");
     if (musicData) {
-      setMusicUrl(musicData.data.results[0]);
+      const perfectUrl = musicData.data.results.findIndex((track: any) => {
+        return track.artists.primary.some(
+          (artist: any) => artist.name === musicState.currentlyPlaying.artist[0]
+        );
+      });
+      setMusicUrl(musicData.data.results[perfectUrl !== -1 ? perfectUrl : 0]);
     }
   }, [musicData, musicState.currentlyPlaying]);
 
