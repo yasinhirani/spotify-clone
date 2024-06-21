@@ -68,11 +68,7 @@ function AlbumDetail() {
     <div
       className="flex-grow space-y-10 "
       style={{
-        background:
-          extractedColors[extractedColors.length - 1] === "#000000" ||
-          extractedColors[extractedColors.length - 1] === "#ffffff"
-            ? extractedColors[1]
-            : extractedColors[extractedColors.length - 1],
+        background: extractedColors[1],
       }}
     >
       {/* Start Artist Details */}

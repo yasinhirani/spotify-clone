@@ -5,7 +5,7 @@ import axiosBaseQuery from "../../../../core/utilities/service/axios.service";
 const sectionDetailApi = createApi({
   reducerPath: "SectionDetail",
   baseQuery: axiosBaseQuery({
-    baseUrl: "http://localhost:8080/api",
+    baseUrl: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api`,
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({

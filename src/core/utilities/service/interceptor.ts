@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useGetAccessTokenMutation } from "./core.service";
+import toast from "react-hot-toast";
 
 const Interceptor = () => {
   const [getAccessToken] = useGetAccessTokenMutation();
@@ -22,6 +23,10 @@ const Interceptor = () => {
   axios.interceptors.response.use(
     (res) => res,
     async (err) => {
+      if (err.response.status === 400 || err.response.status === 404) {
+        toast.error(err.response.data.message);
+        return;
+      }
       if (err.response.status === 401) {
         const token = await getAccessToken().then((res) => {
           return res.data.access_token;
