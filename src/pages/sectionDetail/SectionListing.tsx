@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from "react-router-dom";
 import HomePageListCard from "../../shared/components/HomePageListCard";
-import {
-  useGetSectionOverviewQuery,
-  useGetSectionPlaylistOverviewQuery,
-} from "./utility/service/sectionListing.service";
+import { useGetSectionOverviewQuery } from "./utility/service/sectionListing.service";
 import { useEffect, useState } from "react";
 import Loader from "../../shared/components/Loader";
+import { useGetFeaturedPlaylistDataQuery } from "../Home/utilities/service/home.service";
 
 function SectionListing() {
   const { sectionName } = useParams();
 
   const { data: sectionDetailRes } = useGetSectionOverviewQuery(sectionName!, {
-    skip: sectionName === "playlist",
+    skip: sectionName && sectionName === "playlist" ? true : false,
   });
 
-  const { data: sectionPlaylistDetailRes } = useGetSectionPlaylistOverviewQuery(
+  const { data: sectionPlaylistDetailRes } = useGetFeaturedPlaylistDataQuery(20,
     {
-      skip: sectionName !== "playlist",
+      skip: sectionName && sectionName !== "playlist" ? true : false,
     }
   );
 
+  console.log(sectionName);
   const [sectionDetail, setSectionDetail] = useState<any>(null);
 
   useEffect(() => {
@@ -53,6 +52,12 @@ function SectionListing() {
               title={item.name}
               id={item.id}
               type={item.type}
+              description={
+                (item.type === "artist" && "Artist") ||
+                (item.type === "album" &&
+                  item.artists.map((artist: any) => artist.name).join(", ")) ||
+                (item.type === "playlist" && item.description)
+              }
             />
           );
         })}

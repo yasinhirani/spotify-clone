@@ -18,22 +18,5 @@ const sectionDetailApi = createApi({
   }),
 });
 
-const sectionPlaylistDetailApi = createApi({
-  reducerPath: "SectionPlaylistDetail",
-  baseQuery: axiosBaseQuery({
-    baseUrl: import.meta.env.VITE_SPOTIFY_BASE_URL,
-  }),
-  keepUnusedDataFor: 14400,
-  endpoints: (builder) => ({
-    getSectionPlaylistOverview: builder.query<any, any>({
-      query: () => ({
-        url: `/v1/browse/featured-playlists?locale=en_IN&limit=20&offset=0`,
-        method: "GET",
-      }),
-    }),
-  }),
-});
-
 export const { useGetSectionOverviewQuery } = sectionDetailApi;
-export const { useGetSectionPlaylistOverviewQuery } = sectionPlaylistDetailApi;
-export { sectionDetailApi, sectionPlaylistDetailApi };
+export { sectionDetailApi };

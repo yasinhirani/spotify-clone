@@ -25,9 +25,9 @@ const featuredPlaylistApi = createApi({
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
-    getFeaturedPlaylistData: builder.query<any, void>({
-      query: () => ({
-        url: "/v1/browse/featured-playlists?locale=en_IN&limit=5&offset=0",
+    getFeaturedPlaylistData: builder.query<any, number>({
+      query: (limit: number) => ({
+        url: `/v1/browse/featured-playlists?locale=en_IN&limit=${limit}&offset=0`,
         method: "GET",
       }),
     }),

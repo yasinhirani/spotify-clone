@@ -1,8 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import {
-  sectionDetailApi,
-  sectionPlaylistDetailApi,
-} from "../pages/sectionDetail/utility/service/sectionListing.service";
+import { sectionDetailApi } from "../pages/sectionDetail/utility/service/sectionListing.service";
 import {
   homepageApi,
   featuredPlaylistApi,
@@ -22,7 +19,6 @@ const store = configureStore({
     [homepageApi.reducerPath]: homepageApi.reducer,
     [featuredPlaylistApi.reducerPath]: featuredPlaylistApi.reducer,
     [sectionDetailApi.reducerPath]: sectionDetailApi.reducer,
-    [sectionPlaylistDetailApi.reducerPath]: sectionPlaylistDetailApi.reducer,
     [artistDetailApi.reducerPath]: artistDetailApi.reducer,
     [coreApi.reducerPath]: coreApi.reducer,
     [albumDetailApi.reducerPath]: albumDetailApi.reducer,
@@ -38,7 +34,6 @@ const store = configureStore({
       homepageApi.middleware,
       featuredPlaylistApi.middleware,
       sectionDetailApi.middleware,
-      sectionPlaylistDetailApi.middleware,
       artistDetailApi.middleware,
       coreApi.middleware,
       albumDetailApi.middleware,

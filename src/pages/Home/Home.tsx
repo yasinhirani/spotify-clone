@@ -12,7 +12,7 @@ import {
 function Home() {
   const navigate = useNavigate();
   const { data: homepageDataRes, isLoading } = useGetHomePageDataQuery();
-  const { data: featuredPlaylistDataRes } = useGetFeaturedPlaylistDataQuery();
+  const { data: featuredPlaylistDataRes } = useGetFeaturedPlaylistDataQuery(5);
   const [homepageData, setHomepageData] = useState<any>(null);
 
   useEffect(() => {
