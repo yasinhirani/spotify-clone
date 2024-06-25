@@ -10,6 +10,7 @@ import Search from "./pages/search/Search";
 import Login from "./core/components/auth/Login";
 import Signup from "./core/components/auth/Signup";
 import VerifyEmail from "./core/components/auth/VerifyEmail";
+import ProtectedRoute from "./core/components/ProtectedRoute";
 
 function AppRoutes() {
   const routes = createBrowserRouter([
@@ -43,9 +44,15 @@ function AppRoutes() {
         },
       ],
     },
-    { path: FileRoutes.LOGIN, element: <Login /> },
-    { path: FileRoutes.REGISTER, element: <Signup /> },
-    { path: FileRoutes.VERIFY_EMAIL, element: <VerifyEmail /> },
+    { path: FileRoutes.LOGIN, element: <ProtectedRoute Children={Login} /> },
+    {
+      path: FileRoutes.REGISTER,
+      element: <ProtectedRoute Children={Signup} />,
+    },
+    {
+      path: FileRoutes.VERIFY_EMAIL,
+      element: <ProtectedRoute Children={VerifyEmail} />,
+    },
   ]);
   return <RouterProvider router={routes} />;
 }

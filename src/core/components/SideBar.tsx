@@ -22,8 +22,8 @@ function SideBar() {
             className={`${
               isActive(FileRoutes.HOME)
                 ? "text-white"
-                : "text-gray-300 hover:text-white"
-            }`}
+                : "text-[#b3b3b3] hover:text-white"
+            } transition-colors`}
           >
             <Link to={FileRoutes.HOME} className="flex items-center space-x-4">
               <HomeIcon className="w-6 h-6" />
@@ -34,8 +34,8 @@ function SideBar() {
             className={`${
               isActive(FileRoutes.SEARCH)
                 ? "text-white"
-                : "text-gray-300 hover:text-white"
-            }`}
+                : "text-[#b3b3b3] hover:text-white"
+            } transition-colors`}
           >
             <Link to={FileRoutes.SEARCH} className="flex items-center space-x-4">
               <MagnifyingGlassIcon className="w-6 h-6" />

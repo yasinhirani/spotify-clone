@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BottomNavigation from "./core/components/BottomNavigation";
 import { useEffect } from "react";
 import { setAuthData } from "./features/auth/auth";
+import "./App.css";
 
 function App() {
   const dispatch = useDispatch();

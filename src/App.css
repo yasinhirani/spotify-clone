@@ -1,0 +1,11 @@
+.scroll-card-grid{
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(160px, 1fr);
+    gap: 25px;
+    overflow-x: auto;
+}
+
+.scroll-card-grid::-webkit-scrollbar{
+    display: none;
+}

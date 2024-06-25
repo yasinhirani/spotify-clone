@@ -27,6 +27,7 @@ function Home() {
               id: item.id,
               name: item.name,
               type: item.type,
+              description: item.description,
               images: [
                 {
                   url: item.images[0].url,
@@ -64,7 +65,7 @@ function Home() {
                   see all
                 </button>
               </div>
-              <div className="mt-6 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
+              <div className="scroll-card-grid mt-6">
                 {item.contents.items.slice(0, 5).map((listItem: any) => {
                   return (
                     <HomePageListCard
@@ -73,6 +74,14 @@ function Home() {
                       title={listItem.name}
                       type={listItem.type}
                       id={listItem.id}
+                      description={
+                        (listItem.type === "artist" && "Artist") ||
+                        (listItem.type === "album" &&
+                          listItem.artists
+                            .map((artist: any) => artist.name)
+                            .join(", ")) ||
+                        (listItem.type === "playlist" && listItem.description)
+                      }
                     />
                   );
                 })}
