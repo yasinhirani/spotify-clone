@@ -79,7 +79,7 @@ function Header() {
         </div>
       )}
       {authState.authData ? (
-        <div className="flex items-center space-x-5">
+        <div className="hidden md:flex items-center md:space-x-5">
           {/* <button
             className="text-sm bg-white text-black px-5 py-2 rounded-3xl font-semibold"
             onClick={handlePremiumClick}

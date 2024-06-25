@@ -6,9 +6,10 @@ interface IProps {
   title: string;
   id: string;
   type: string;
+  description: string;
 }
 
-function HomePageListCard({ imageUrl, title, id, type }: IProps) {
+function HomePageListCard({ imageUrl, title, id, type, description }: IProps) {
   const navigate = useNavigate();
   return (
     <div
@@ -24,18 +25,18 @@ function HomePageListCard({ imageUrl, title, id, type }: IProps) {
           }/${id}`
         )
       }
-      className="bg-[#b3b3b3] bg-opacity-10 p-3 rounded-md"
     >
-      <figure className="rounded-md overflow-hidden shadow-xl shadow-[rgba(0,0,0,0.3)]">
+      <figure className={`${type === "artist" ? "rounded-full" : "md:rounded-md"} overflow-hidden`}>
         <img
           src={imageUrl}
           alt={title}
           className="w-full h-full object-cover aspect-square"
         />
       </figure>
-      <h6 className="text-white font-semibold text-sm tracking-wide mt-4 w-full whitespace-nowrap overflow-hidden overflow-ellipsis">
+      <h6 className="text-white font-normal tracking-wide mt-4 w-full whitespace-nowrap overflow-hidden overflow-ellipsis">
         {title}
       </h6>
+      <p className="text-[#b3b3b3] text-sm line-clamp-2 mt-1">{description}</p>
     </div>
   );
 }

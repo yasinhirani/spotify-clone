@@ -17,7 +17,7 @@ const searchApi = createApi({
     }),
     getSearchResult: builder.query<any, string>({
       query: (searchValue: string) => ({
-        url: `/v1/search?q=${searchValue}&type=album,track,artist,playlist&limit=5&offset=0`,
+        url: `/v1/search?q=${searchValue}&type=album,track,artist,playlist&limit=10&offset=0`,
         method: "GET",
       }),
     }),

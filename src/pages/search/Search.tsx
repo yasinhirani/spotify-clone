@@ -7,7 +7,7 @@ import HomePageListCard from "../../shared/components/HomePageListCard";
 import { useNavigate } from "react-router-dom";
 import { FileRoutes } from "../../core/utilities/constants/core.constants";
 import { setMusicList } from "../../features/musicList/musicList";
-import { setSearchResult } from "../../features/search/search";
+// import { setSearchResult } from "../../features/search/search";
 
 function Search() {
   const navigate = useNavigate();
@@ -61,9 +61,9 @@ function Search() {
     if (browseCategoriesRes) {
       setBrowseCategories(browseCategoriesRes.categories.items);
     }
-    return () => {
-      dispatch(setSearchResult(null));
-    };
+    // return () => {
+    //   dispatch(setSearchResult(null));
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [browseCategoriesRes]);
 
@@ -148,13 +148,24 @@ function Search() {
           {/* Start Artists */}
           <div className="mt-10">
             <h2 className="font-bold text-2xl text-white">Artists</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5">
+            <div className="scroll-card-grid mt-5">
               {searchState.searchResult.artists.items.map((artist: any) => {
                 return (
-                  <div key={artist.id}>
+                  <div
+                    key={artist.id}
+                    role="button"
+                    onClick={() =>
+                      navigate(`${FileRoutes.ARTIST}/${artist.id}`)
+                    }
+                    className="w-full"
+                  >
                     {artist.images.length > 0 ? (
-                      <figure className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden">
-                        <img src={artist.images[0]?.url} alt={artist.name} />
+                      <figure className="rounded-full overflow-hidden">
+                        <img
+                          src={artist.images[0]?.url}
+                          alt={artist.name}
+                          className="aspect-square object-cover"
+                        />
                       </figure>
                     ) : (
                       <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full flex justify-center items-center font-semibold text-3xl bg-gray-400">
@@ -164,14 +175,9 @@ function Search() {
                           .join("")}
                       </div>
                     )}
-                    <button
-                      className="font-medium text-lg text-white mt-3 whitespace-nowrap w-full overflow-hidden overflow-ellipsis text-left"
-                      onClick={() =>
-                        navigate(`${FileRoutes.ARTIST}/${artist.id}`)
-                      }
-                    >
+                    <h3 className="font-medium text-lg text-white mt-3 whitespace-nowrap w-full overflow-hidden overflow-ellipsis text-left">
                       {artist.name}
-                    </button>
+                    </h3>
                     <h6 className="font-medium text-sm text-gray-400 capitalize">
                       {artist.type}
                     </h6>
@@ -184,7 +190,7 @@ function Search() {
           {/* Start albums */}
           <div className="mt-10">
             <h2 className="font-bold text-2xl text-white">Albums</h2>
-            <div className="mt-5 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
+            <div className="mt-5 scroll-card-grid">
               {searchState.searchResult.albums.items.map((album: any) => {
                 return (
                   <HomePageListCard
@@ -193,6 +199,9 @@ function Search() {
                     imageUrl={album.images[0]?.url}
                     title={album.name}
                     type={album.type}
+                    description={album.artists
+                      .map((artist: any) => artist.name)
+                      .join(", ")}
                   />
                 );
               })}
@@ -202,7 +211,7 @@ function Search() {
           {/* Start playlists */}
           <div className="mt-10">
             <h2 className="font-bold text-2xl text-white">Playlists</h2>
-            <div className="mt-5 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
+            <div className="mt-5 scroll-card-grid">
               {searchState.searchResult.playlists.items.map((playlist: any) => {
                 return (
                   <HomePageListCard
@@ -211,6 +220,7 @@ function Search() {
                     imageUrl={playlist.images[0]?.url}
                     title={playlist.name}
                     type={playlist.type}
+                    description={playlist.description}
                   />
                 );
               })}

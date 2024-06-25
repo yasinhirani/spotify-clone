@@ -21,8 +21,16 @@ function Player() {
   const [url, setUrl] = useState<string>("");
   const [playing, setPlaying] = useState<boolean>(false);
   const [progressValue, setProgressValue] = useState<number>(0);
+  const [duration, setDuration] = useState<{
+    minutes: string;
+    seconds: string;
+  }>({
+    minutes: "0",
+    seconds: "00",
+  });
 
   const audioRef = useRef<any>();
+  const intervalRef = useRef<any>();
 
   const handlePlay = () => {
     if (audioRef.current) {
@@ -54,6 +62,15 @@ function Player() {
     }
   };
 
+  const updateTime = () => {
+    const minutes = Math.floor(audioRef.current.currentTime / 60);
+    const seconds = Math.floor(audioRef.current.currentTime - minutes * 60);
+    setDuration({
+      minutes: minutes.toString(),
+      seconds: seconds < 10 ? `0${seconds}` : seconds.toString(),
+    });
+  };
+
   const updateProgressBar = (e: any) => {
     const { currentTime, duration } = e.target;
     const progress = Math.floor((currentTime / duration) * 100);
@@ -81,6 +98,18 @@ function Player() {
   const skipMusic = (e: any) => {
     const { duration } = audioRef.current;
     audioRef.current.currentTime = (e.target.value * duration) / 100;
+  };
+
+  const handleOnPlay = () => {
+    document.title = musicState.currentlyPlaying.name;
+    intervalRef.current = setInterval(updateTime, 1000);
+    setPlaying(true);
+  };
+
+  const handleOnPause = () => {
+    document.title = "TuneTide";
+    clearInterval(intervalRef.current);
+    setPlaying(false);
   };
 
   const setMusicUrl = async (musicData: any) => {
@@ -111,6 +140,10 @@ function Player() {
 
   useEffect(() => {
     setUrl("");
+    setDuration({
+      minutes: "0",
+      seconds: "00",
+    });
     if (musicData) {
       const perfectUrl = musicData.data.results.findIndex((track: any) => {
         return track.artists.primary.some(
@@ -119,6 +152,8 @@ function Player() {
       });
       setMusicUrl(musicData.data.results[perfectUrl !== -1 ? perfectUrl : 0]);
     }
+
+    return () => clearInterval(intervalRef.current);
   }, [musicData, musicState.currentlyPlaying]);
 
   if (!url) {
@@ -137,8 +172,8 @@ function Player() {
         src={url}
         onEnded={playNextSong}
         onTimeUpdate={updateProgressBar}
-        onPause={() => setPlaying(false)}
-        onPlay={() => setPlaying(true)}
+        onPause={handleOnPause}
+        onPlay={handleOnPlay}
       />
       <div className="flex items-center space-x-5">
         <figure className="w-10 h-10 min-w-10 rounded overflow-hidden">
@@ -184,19 +219,34 @@ function Player() {
             style={{ width: `${progressValue}%` }}
           />
         </div> */}
-        <input
-          type="range"
-          name="progress"
-          id="progress"
-          min={0}
-          max={100}
-          value={progressValue}
-          style={{
-            background: `linear-gradient(to right, #ffffff ${progressValue}%, rgba(255, 255, 255, 0.3) ${progressValue}%)`,
-          }}
-          className="h-1 my-5 md:my-0 md:mt-5"
-          onChange={skipMusic}
-        />
+        <div>
+          <input
+            type="range"
+            name="progress"
+            id="progress"
+            min={0}
+            max={100}
+            value={progressValue || 0}
+            style={{
+              background: `linear-gradient(to right, #ffffff ${
+                progressValue || 0
+              }%, rgba(255, 255, 255, 0.3) ${progressValue || 0}%)`,
+            }}
+            className="w-full h-1 my-5 md:my-0 md:mt-5"
+            onChange={skipMusic}
+          />
+          <div className="flex justify-between items-center text-white text-sm">
+            <p>
+              {duration.minutes}:{duration.seconds}
+            </p>
+            <p>
+              {Math.floor(musicState.currentlyPlaying.duration_ms / 1000 / 60)}:
+              {Math.floor(
+                (musicState.currentlyPlaying.duration_ms / 1000) % 60
+              )}
+            </p>
+          </div>
+        </div>
         {/* End Progress bar */}
       </div>
       {/* End controls and progress bar */}
