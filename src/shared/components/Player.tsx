@@ -139,7 +139,6 @@ function Player() {
   };
 
   const handleMediaLoaded = () => {
-    console.log("load")
     setMediaLoading(false);
     const timeout = setTimeout(() => {
       handlePlay();
@@ -177,7 +176,25 @@ function Player() {
       setMusicUrl(musicData.data.results[perfectUrl !== -1 ? perfectUrl : 0]);
     }
 
-    return () => clearInterval(intervalRef.current);
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.setActionHandler("nexttrack", playNextSong);
+      navigator.mediaSession.setActionHandler(
+        "previoustrack",
+        playPreviousSong
+      );
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: musicState.currentlyPlaying.name,
+        artist: musicState.currentlyPlaying.artist.join(", "),
+        artwork: [{ src: musicState.currentlyPlaying.image }],
+      });
+    }
+
+    return () => {
+      navigator.mediaSession.setActionHandler("nexttrack", null);
+      navigator.mediaSession.setActionHandler("previoustrack", null);
+      navigator.mediaSession.metadata = null;
+      clearInterval(intervalRef.current);
+    };
   }, [musicData, musicState.currentlyPlaying]);
 
   if (!url) {
@@ -217,7 +234,7 @@ function Player() {
       {/* Start controls and progress bar */}
       <div className="w-full flex flex-col-reverse md:flex-col">
         <div className="flex justify-center items-center space-x-3 w-full">
-          <button onClick={playPreviousSong}>
+          <button onClick={playPreviousSong} aria-label="Previous">
             <PreviousIcon className="w-10 h-10 text-white" />
           </button>
           {!playing && !mediaLoading && (
@@ -231,7 +248,7 @@ function Player() {
             </button>
           )}
           {mediaLoading && <div className="spinner" />}
-          <button onClick={playNextSong}>
+          <button onClick={playNextSong} aria-label="Next">
             <NextIcon className="w-10 h-10 text-white" />
           </button>
         </div>
