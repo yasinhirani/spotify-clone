@@ -28,6 +28,7 @@ function Player() {
     minutes: "0",
     seconds: "00",
   });
+  const [mediaLoading, setMediaLoading] = useState<boolean>(false);
 
   const audioRef = useRef<any>();
   const intervalRef = useRef<any>();
@@ -45,18 +46,53 @@ function Player() {
   };
 
   const playPreviousSong = () => {
-    setUrl("");
     audioRef.current.currentTime = 0;
     const indexOfCurrentSong = musicState.musicList.findIndex(
       (music: any) => music.id === musicState.currentlyPlaying.id
     );
-    if (indexOfCurrentSong !== -1 && indexOfCurrentSong > 0) {
-      dispatch(
-        setMusicList({
-          currentlyPlaying: musicState.musicList[indexOfCurrentSong - 1],
-          musicList: musicState.musicList,
-        })
-      );
+    if (indexOfCurrentSong !== -1) {
+      if (indexOfCurrentSong > 0) {
+        dispatch(
+          setMusicList({
+            currentlyPlaying: musicState.musicList[indexOfCurrentSong - 1],
+            musicList: musicState.musicList,
+          })
+        );
+      } else {
+        dispatch(
+          setMusicList({
+            currentlyPlaying:
+              musicState.musicList[musicState.musicList.length - 1],
+            musicList: musicState.musicList,
+          })
+        );
+      }
+    } else {
+      return;
+    }
+  };
+
+  const playNextSong = () => {
+    audioRef.current.currentTime = 0;
+    const indexOfCurrentSong = musicState.musicList.findIndex(
+      (music: any) => music.id === musicState.currentlyPlaying.id
+    );
+    if (indexOfCurrentSong !== -1) {
+      if (indexOfCurrentSong < musicState.musicList.length - 1) {
+        dispatch(
+          setMusicList({
+            currentlyPlaying: musicState.musicList[indexOfCurrentSong + 1],
+            musicList: musicState.musicList,
+          })
+        );
+      } else {
+        dispatch(
+          setMusicList({
+            currentlyPlaying: musicState.musicList[0],
+            musicList: musicState.musicList,
+          })
+        );
+      }
     } else {
       return;
     }
@@ -75,24 +111,6 @@ function Player() {
     const { currentTime, duration } = e.target;
     const progress = Math.floor((currentTime / duration) * 100);
     setProgressValue(progress);
-  };
-
-  const playNextSong = () => {
-    setUrl("");
-    audioRef.current.currentTime = 0;
-    const indexOfCurrentSong = musicState.musicList.findIndex(
-      (music: any) => music.id === musicState.currentlyPlaying.id
-    );
-    if (indexOfCurrentSong !== -1) {
-      dispatch(
-        setMusicList({
-          currentlyPlaying: musicState.musicList[indexOfCurrentSong + 1],
-          musicList: musicState.musicList,
-        })
-      );
-    } else {
-      return;
-    }
   };
 
   const skipMusic = (e: any) => {
@@ -118,11 +136,15 @@ function Player() {
     } else {
       setUrl(musicState.currentlyPlaying.preview_url);
     }
+  };
+
+  const handleMediaLoaded = () => {
+    setMediaLoading(false);
     const timeout = setTimeout(() => {
       handlePlay();
       clearTimeout(timeout);
     }, 100);
-  };
+  }
 
   // const compareArtists = (songObj: any) => {
   //   const artistList = [...songObj.artists.primary];
@@ -144,6 +166,7 @@ function Player() {
       minutes: "0",
       seconds: "00",
     });
+    setMediaLoading(true);
     if (musicData) {
       const perfectUrl = musicData.data.results.findIndex((track: any) => {
         return track.artists.primary.some(
@@ -164,26 +187,27 @@ function Player() {
     );
   }
   return (
-    <div className="bg-black px-8 py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center">
+    <div className="bg-black px-8 py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center rounded-lg md:rounded-none">
       {/* Start song title and image */}
       <audio
         ref={audioRef}
-        className="hidden"
         src={url}
+        className="hidden"
         onEnded={playNextSong}
         onTimeUpdate={updateProgressBar}
         onPause={handleOnPause}
         onPlay={handleOnPlay}
+        onLoadedData={handleMediaLoaded}
       />
       <div className="flex items-center space-x-5">
         <figure className="w-10 h-10 min-w-10 rounded overflow-hidden">
           <img src={musicState.currentlyPlaying.image} alt="Animal" />
         </figure>
         <div>
-          <p className="text-white font-medium text-sm w-[30ch] whitespace-nowrap overflow-hidden overflow-ellipsis">
+          <p className="text-white font-medium text-sm w-full max-w-56 sm:max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
             {musicState.currentlyPlaying.name}
           </p>
-          <p className="text-gray-400 text-sm w-[30ch] whitespace-nowrap overflow-hidden overflow-ellipsis">
+          <p className="text-gray-400 text-sm w-full max-w-56 sm:max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
             {musicState.currentlyPlaying.artist.join(", ")}
           </p>
         </div>
@@ -205,6 +229,7 @@ function Player() {
               <PauseCircleIcon className="w-10 h-10 text-white" />
             </button>
           )}
+          {mediaLoading && <div className="spinner" />}
           <button onClick={playNextSong}>
             <NextIcon className="w-10 h-10 text-white" />
           </button>
@@ -241,9 +266,17 @@ function Player() {
             </p>
             <p>
               {Math.floor(musicState.currentlyPlaying.duration_ms / 1000 / 60)}:
-              {Math.floor(
-                (musicState.currentlyPlaying.duration_ms / 1000) % 60
-              )}
+              {`${
+                Math.floor(
+                  (musicState.currentlyPlaying.duration_ms / 1000) % 60
+                ) > 9
+                  ? Math.floor(
+                      (musicState.currentlyPlaying.duration_ms / 1000) % 60
+                    )
+                  : `0${Math.floor(
+                      (musicState.currentlyPlaying.duration_ms / 1000) % 60
+                    )}`
+              }`}
             </p>
           </div>
         </div>

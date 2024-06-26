@@ -19,7 +19,6 @@ function SectionListing() {
     }
   );
 
-  console.log(sectionName);
   const [sectionDetail, setSectionDetail] = useState<any>(null);
 
   useEffect(() => {

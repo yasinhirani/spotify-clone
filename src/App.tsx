@@ -22,16 +22,22 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="w-full h-full overflow-hidden flex flex-col">
+    <div className="main-bg w-full h-full overflow-hidden flex flex-col">
       <div className="w-full flex-grow h-full flex overflow-hidden">
         <SideBar />
-        <div className="main-bg flex-grow flex flex-col overflow-y-auto relative">
+        <div className="flex-grow flex flex-col overflow-y-auto relative">
           <Header />
           <Outlet />
         </div>
       </div>
-      {musicState.currentlyPlaying && <Player />}
-      <BottomNavigation />
+      {musicState.currentlyPlaying && (
+        <div className="px-3 pb-2 md:p-0">
+          <Player />
+        </div>
+      )}
+      <div className="px-3 pb-2 md:p-0">
+        <BottomNavigation />
+      </div>
     </div>
   );
 }
