@@ -139,6 +139,7 @@ function Player() {
   };
 
   const handleMediaLoaded = () => {
+    console.log("load")
     setMediaLoading(false);
     const timeout = setTimeout(() => {
       handlePlay();
@@ -197,7 +198,7 @@ function Player() {
         onTimeUpdate={updateProgressBar}
         onPause={handleOnPause}
         onPlay={handleOnPlay}
-        onLoadedData={handleMediaLoaded}
+        onLoadedMetadata={handleMediaLoaded}
       />
       <div className="flex items-center space-x-5">
         <figure className="w-10 h-10 min-w-10 rounded overflow-hidden">
