@@ -37,12 +37,16 @@ function Player() {
     if (audioRef.current) {
       audioRef.current.play();
     }
+    setPlaying(true);
+    intervalRef.current = setInterval(updateTime, 1000);
   };
 
   const handlePause = () => {
     if (audioRef.current) {
       audioRef.current.pause();
     }
+    setPlaying(false);
+    clearInterval(intervalRef.current);
   };
 
   const playPreviousSong = () => {
@@ -118,16 +122,12 @@ function Player() {
     audioRef.current.currentTime = (e.target.value * duration) / 100;
   };
 
-  const handleOnPlay = () => {
-    document.title = musicState.currentlyPlaying.name;
-    intervalRef.current = setInterval(updateTime, 1000);
-    setPlaying(true);
-  };
-
-  const handleOnPause = () => {
-    document.title = "TuneTide";
-    clearInterval(intervalRef.current);
-    setPlaying(false);
+  const handleMediaLoaded = () => {
+    setMediaLoading(false);
+    const timeout = setTimeout(() => {
+      handlePlay();
+      clearTimeout(timeout);
+    }, 100);
   };
 
   const setMusicUrl = async (musicData: any) => {
@@ -136,14 +136,6 @@ function Player() {
     } else {
       setUrl(musicState.currentlyPlaying.preview_url);
     }
-  };
-
-  const handleMediaLoaded = () => {
-    setMediaLoading(false);
-    const timeout = setTimeout(() => {
-      handlePlay();
-      clearTimeout(timeout);
-    }, 100);
   };
 
   // const compareArtists = (songObj: any) => {
@@ -177,6 +169,8 @@ function Player() {
     }
 
     if ("mediaSession" in navigator) {
+      navigator.mediaSession.setActionHandler("play", handlePlay);
+      navigator.mediaSession.setActionHandler("pause", handlePause);
       navigator.mediaSession.setActionHandler("nexttrack", playNextSong);
       navigator.mediaSession.setActionHandler(
         "previoustrack",
@@ -190,6 +184,8 @@ function Player() {
     }
 
     return () => {
+      navigator.mediaSession.setActionHandler("play", null);
+      navigator.mediaSession.setActionHandler("pause", null);
       navigator.mediaSession.setActionHandler("nexttrack", null);
       navigator.mediaSession.setActionHandler("previoustrack", null);
       navigator.mediaSession.metadata = null;
@@ -213,8 +209,8 @@ function Player() {
         className="hidden"
         onEnded={playNextSong}
         onTimeUpdate={updateProgressBar}
-        onPause={handleOnPause}
-        onPlay={handleOnPlay}
+        // onPause={handleOnPause}
+        // onPlay={handleOnPlay}
         onLoadedMetadata={handleMediaLoaded}
       />
       <div className="flex items-center space-x-5">

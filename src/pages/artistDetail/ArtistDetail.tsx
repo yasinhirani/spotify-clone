@@ -91,7 +91,10 @@ function ArtistDetail() {
       {/* End Artist Details */}
       {/* Start play and follow button */}
       <div className="flex items-center space-x-10 mt-5">
-        <button className="bg-[#1DB954] w-16 h-16 rounded-full flex justify-center items-center">
+        <button
+          className="bg-[#1DB954] w-16 h-16 rounded-full flex justify-center items-center"
+          onClick={() => handleClick(0)}
+        >
           <PlayIcon className="size-10" />
         </button>
         <button className="text-white border border-gray-400 px-8 py-2 rounded-3xl">
