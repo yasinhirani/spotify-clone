@@ -27,7 +27,17 @@ const Interceptor = () => {
         toast.error(err.response.data.message);
         return;
       }
-      if (err.response.status === 401) {
+      if (
+        err.response.status === 401 &&
+        !err.request.responseURL.includes("api.spotify.com")
+      ) {
+        toast.error(err.response.data.message);
+        return;
+      }
+      if (
+        err.response.status === 401 &&
+        err.request.responseURL.includes("api.spotify.com")
+      ) {
         const token = await getAccessToken().then((res) => {
           return res.data.access_token;
         });

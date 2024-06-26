@@ -7,6 +7,7 @@ import debounce from "../../shared/utilities/functions/function";
 import { useLazyGetSearchResultQuery } from "../../pages/search/utilities/service/search.service";
 import { setSearchResult } from "../../features/search/search";
 import { setAuthData } from "../../features/auth/auth";
+import toast from "react-hot-toast";
 // import { useLazyCreateSubscriptionQuery } from "../utilities/service/core.service";
 
 function Header() {
@@ -31,6 +32,7 @@ function Header() {
   const handleLogout = () => {
     dispatch(setAuthData(null));
     localStorage.removeItem("user");
+    toast.success("Logout Successfully");
   };
 
   // const handlePremiumClick = async () => {
