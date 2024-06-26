@@ -27,7 +27,10 @@ function PlaylistDetail() {
       navigate(FileRoutes.LOGIN);
       return;
     }
-    const selectedMusic = playlistTracks[index];
+    const selectedMusic = playlistTracks.filter(
+      (track: any) =>
+        !Object.prototype.hasOwnProperty.call(track.track, "restrictions")
+    )[index];
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.track.id,
@@ -35,18 +38,23 @@ function PlaylistDetail() {
         artist: selectedMusic.track.artists.map((artist: any) => artist.name),
         duration_ms: selectedMusic.track.duration_ms,
         preview_url: selectedMusic.track.preview_url,
-        image: selectedMusic.track.album.images[0].url,
+        image: selectedMusic.track.album.images[0]?.url,
       },
-      musicList: playlistTracks.map((track: any) => {
-        return {
-          id: track.track.id,
-          name: track.track.name,
-          artist: track.track.artists.map((artist: any) => artist.name),
-          duration_ms: track.track.duration_ms,
-          preview_url: track.track.preview_url,
-          image: track.track.album.images[0].url,
-        };
-      }),
+      musicList: playlistTracks
+        .filter(
+          (track: any) =>
+            !Object.prototype.hasOwnProperty.call(track.track, "restrictions")
+        )
+        .map((track: any) => {
+          return {
+            id: track.track.id,
+            name: track.track.name,
+            artist: track.track.artists.map((artist: any) => artist.name),
+            duration_ms: track.track.duration_ms,
+            preview_url: track.track.preview_url,
+            image: track.track.album.images[0]?.url,
+          };
+        }),
     };
     dispatch(setMusicList(dispatchObj));
   };
@@ -70,7 +78,7 @@ function PlaylistDetail() {
     <div
       className="flex-grow space-y-10"
       style={{
-        background: extractedColors[1]
+        background: extractedColors[1],
       }}
     >
       {/* Start Artist Details */}
@@ -129,7 +137,7 @@ function PlaylistDetail() {
                 return (
                   <div
                     className="flex items-center text-white relative"
-                    key={track.track.id}
+                    key={`${track.track.id}${index}`}
                   >
                     <span className="text-gray-400 absolute left-0">
                       {index + 1}

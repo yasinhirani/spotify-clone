@@ -5,7 +5,7 @@ import {
   ArrowLeftEndOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
   HomeIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthData } from "../../features/auth/auth";
@@ -15,7 +15,7 @@ function BottomNavigation() {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex md:hidden w-full h-14 bg-black text-white px-10 py-3 items-center">
+    <div className="flex md:hidden w-full h-14 bg-black text-white px-10 py-3 items-center rounded-lg">
       <ul className="w-full flex justify-between items-center space-x-5">
         <li>
           <Link to={FileRoutes.HOME}>
@@ -29,7 +29,12 @@ function BottomNavigation() {
         </li>
         <li>
           {authState.authData ? (
-            <button onClick={() => dispatch(setAuthData(null))}>
+            <button
+              onClick={() => {
+                dispatch(setAuthData(null));
+                localStorage.removeItem("user");
+              }}
+            >
               <ArrowRightEndOnRectangleIcon className="w-6 h-6" />
             </button>
           ) : (
