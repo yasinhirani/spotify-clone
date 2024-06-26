@@ -144,7 +144,7 @@ function Player() {
       handlePlay();
       clearTimeout(timeout);
     }, 100);
-  }
+  };
 
   // const compareArtists = (songObj: any) => {
   //   const artistList = [...songObj.artists.primary];
@@ -219,12 +219,12 @@ function Player() {
           <button onClick={playPreviousSong}>
             <PreviousIcon className="w-10 h-10 text-white" />
           </button>
-          {!playing && (
+          {!playing && !mediaLoading && (
             <button onClick={handlePlay}>
               <PlayCircleIcon className="w-10 h-10 text-white" />
             </button>
           )}
-          {playing && (
+          {playing && !mediaLoading && (
             <button onClick={handlePause}>
               <PauseCircleIcon className="w-10 h-10 text-white" />
             </button>
