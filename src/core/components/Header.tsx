@@ -75,14 +75,16 @@ function Header() {
       <div className="flex items-center space-x-5">
         <div className="hidden md:flex items-center space-x-3 text-white">
           <button
-            className="bg-black bg-opacity-20 rounded-full p-2"
+            className="bg-black bg-opacity-20 rounded-full p-2 disabled:cursor-not-allowed disabled:opacity-60"
             onClick={() => navigate(-1)}
+            disabled={window.history.state.idx === 0}
           >
             <ChevronLeftIcon className="w-5 h-5" />
           </button>
           <button
-            className="bg-black bg-opacity-20 rounded-full p-2"
+            className="bg-black bg-opacity-20 rounded-full p-2 disabled:cursor-not-allowed disabled:opacity-60"
             onClick={() => navigate(1)}
+            disabled={window.history.length - window.history.state.idx <= 2}
           >
             <ChevronRightIcon className="w-5 h-5" />
           </button>
