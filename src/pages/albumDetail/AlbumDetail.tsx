@@ -17,6 +17,7 @@ function AlbumDetail() {
   const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
+  const musicState = useSelector((state: any) => state.MusicList);
 
   const [albumData, setAlbumData] = useState<any>(null);
   const [albumTracks, setAlbumTracks] = useState<any>(null);
@@ -73,7 +74,7 @@ function AlbumDetail() {
     >
       {/* Start Artist Details */}
       <div className="pt-10 bg-opacity-40">
-        <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 sm:mt-20">
+        <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 md:mt-20">
           <figure className="w-56 h-56 rounded-md overflow-hidden">
             <img
               src={albumData.images[0].url}
@@ -107,25 +108,31 @@ function AlbumDetail() {
         {/* End play and follow button */}
         {/* Start Popular songs */}
         <div className="mt-5 px-8">
-          <div className="flex items-center text-gray-400 relative border-b border-b-gray-500 pb-2 mt-10">
-            <span className="text-gray-400 absolute left-0">#</span>
-            <div className="w-full lg:min-w-80 text-left ml-8">Title</div>
+          <div className="flex items-center text-gray-400 relative border-b border-b-gray-500 pb-2 mt-10 p-2">
+            <span className="text-gray-400 absolute left-2">#</span>
+            <div className="w-full lg:min-w-80 text-left ml-10">Title</div>
             <p className="ml-5">
               <ClockIcon className="w-6 h-6" />
             </p>
           </div>
-          <div className="mt-5 space-y-6">
+          <div className="mt-5 space-y-4">
             {albumTracks.map((track: any, index: number) => {
               return (
                 <div
-                  className="flex items-center text-white relative"
+                  className="flex items-center text-white relative hover:bg-white hover:bg-opacity-10 p-2 rounded-md"
                   key={track.id}
                 >
-                  <span className="text-gray-400 absolute left-0">
-                    {index + 1}
-                  </span>
+                  {musicState.currentlyPlaying &&
+                  musicState.currentlyPlaying.id === track.id ? (
+                    <span className="mini-loader" />
+                  ) : (
+                    <span className="text-gray-400 absolute left-2">
+                      {index + 1}
+                    </span>
+                  )}
+
                   <button
-                    className="w-full lg:min-w-80 text-left ml-8"
+                    className="w-full lg:min-w-80 text-left ml-10"
                     onClick={() => handleClick(index)}
                   >
                     <p className="font-semibold">{track.name}</p>

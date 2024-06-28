@@ -17,6 +17,7 @@ function PlaylistDetail() {
   const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
+  const musicState = useSelector((state: any) => state.MusicList);
 
   const [playlistData, setPlaylistData] = useState<any>(null);
   const [playlistTracks, setPlaylistTracks] = useState<any>(null);
@@ -83,7 +84,7 @@ function PlaylistDetail() {
     >
       {/* Start Artist Details */}
       <div className="pt-10 bg-opacity-40">
-        <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 sm:mt-20">
+        <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 md:mt-20">
           <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
             <img
               src={playlistData.images[0].url}
@@ -139,9 +140,14 @@ function PlaylistDetail() {
                     className="flex items-center text-white relative"
                     key={`${track.track.id}${index}`}
                   >
-                    <span className="text-gray-400 absolute left-0">
-                      {index + 1}
-                    </span>
+                    {musicState.currentlyPlaying &&
+                    musicState.currentlyPlaying.id === track.id ? (
+                      <span className="mini-loader" />
+                    ) : (
+                      <span className="text-gray-400 absolute left-2">
+                        {index + 1}
+                      </span>
+                    )}
                     <figure className="w-10 h-10 min-w-10 rounded-md overflow-hidden ml-10">
                       <img
                         src={track.track.album.images[0]?.url}

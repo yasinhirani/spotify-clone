@@ -46,7 +46,7 @@ function Home() {
   }
 
   return (
-    <main className="flex-grow mt-10 sm:mt-28 px-4 md:px-8 pb-8 space-y-10 w-full max-w-[1440px] mx-auto">
+    <main className="flex-grow mt-10 md:mt-28 px-4 md:px-8 pb-8 space-y-10 w-full max-w-[1440px] mx-auto">
       {homepageData &&
         homepageData.length > 0 &&
         homepageData.map((item: any) => {

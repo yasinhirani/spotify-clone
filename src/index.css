@@ -67,6 +67,14 @@ body {
   background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
   animation: l2 1s infinite linear;
 }
+
+.mini-loader {
+  width: 16px;
+  aspect-ratio: 1;
+  --c: no-repeat linear-gradient(#ffffff 0 0);
+  background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
+  animation: l2 1s infinite linear;
+}
 @keyframes l2 {
   0% {
     background-size: 20% 100%, 20% 100%, 20% 100%;
