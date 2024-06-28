@@ -31,7 +31,10 @@ function AlbumDetail() {
 
     const selectedMusic = albumTracks[index];
 
-    if (musicState.currentlyPlaying.id === selectedMusic.id) {
+    if (
+      musicState.currentlyPlaying &&
+      musicState.currentlyPlaying.id === selectedMusic.id
+    ) {
       return;
     }
     const dispatchObj = {
