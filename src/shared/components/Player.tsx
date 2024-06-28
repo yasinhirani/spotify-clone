@@ -8,6 +8,7 @@ import { useGetMusicDataQuery } from "../utilities/service/music.service";
 import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { setMusicList } from "../../features/musicList/musicList";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 
 function Player() {
   const musicState = useSelector((state: any) => state.MusicList);
@@ -21,6 +22,7 @@ function Player() {
   const [url, setUrl] = useState<string>("");
   const [playing, setPlaying] = useState<boolean>(false);
   const [progressValue, setProgressValue] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(100);
   const [duration, setDuration] = useState<{
     minutes: string;
     seconds: string;
@@ -130,6 +132,13 @@ function Player() {
     }, 100);
   };
 
+  const handleVolumeChange = (e: any) => {
+    setVolume(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.volume = e.target.value / 100;
+    }
+  }
+
   const setMusicUrl = async (musicData: any) => {
     if (musicData) {
       setUrl(musicData.downloadUrl[3].url);
@@ -169,8 +178,8 @@ function Player() {
     }
 
     if ("mediaSession" in navigator) {
-      navigator.mediaSession.setActionHandler("play", handlePlay);
-      navigator.mediaSession.setActionHandler("pause", handlePause);
+      // navigator.mediaSession.setActionHandler("play", handlePlay);
+      // navigator.mediaSession.setActionHandler("pause", handlePause);
       navigator.mediaSession.setActionHandler("nexttrack", playNextSong);
       navigator.mediaSession.setActionHandler(
         "previoustrack",
@@ -184,8 +193,8 @@ function Player() {
     }
 
     return () => {
-      navigator.mediaSession.setActionHandler("play", null);
-      navigator.mediaSession.setActionHandler("pause", null);
+      // navigator.mediaSession.setActionHandler("play", null);
+      // navigator.mediaSession.setActionHandler("pause", null);
       navigator.mediaSession.setActionHandler("nexttrack", null);
       navigator.mediaSession.setActionHandler("previoustrack", null);
       navigator.mediaSession.metadata = null;
@@ -209,8 +218,8 @@ function Player() {
         className="hidden"
         onEnded={playNextSong}
         onTimeUpdate={updateProgressBar}
-        // onPause={handleOnPause}
-        // onPlay={handleOnPlay}
+        onPause={handlePause}
+        onPlay={handlePlay}
         onLoadedMetadata={handleMediaLoaded}
       />
       <div className="flex items-center space-x-5">
@@ -297,18 +306,25 @@ function Player() {
         {/* End Progress bar */}
       </div>
       {/* End controls and progress bar */}
-      {/* Start cancel button */}
-      {/* <button className="text-white justify-end hidden md:flex" onClick={() => {
-        dispatch(
-          setMusicList({
-            currentlyPlaying: null,
-            musicList: null,
-          })
-        );
-      }}>
-        <XMarkIcon className="w-6 h-6" />
-      </button> */}
-      {/* End cancel button */}
+      {/* Start volume */}
+      <div className="justify-self-end self-center hidden lg:flex items-center space-x-3">
+        <SpeakerWaveIcon className="w-5 h-5 text-white" />
+        <input
+          type="range"
+          name="volume"
+          id="volume"
+          min={0}
+          max={100}
+          value={volume}
+          onChange={handleVolumeChange}
+          style={{
+            background: `linear-gradient(to right, #ffffff ${
+              volume || 0
+            }%, rgba(255, 255, 255, 0.3) ${volume || 0}%)`,
+          }}
+        />
+      </div>
+      {/* End volume */}
     </div>
   );
 }

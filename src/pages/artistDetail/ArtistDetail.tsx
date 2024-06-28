@@ -17,6 +17,7 @@ function ArtistDetail() {
   const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
+  const musicState = useSelector((state: any) => state.MusicList);
 
   const { data: artistDataRes } = useGetArtistDetailQuery(artistId!);
   const { data: artistPopularTrackRes } = useGetArtistPopularTracksQuery(
@@ -67,7 +68,7 @@ function ArtistDetail() {
     return <Loader />;
   }
   return (
-    <div className="flex-grow mt-10 sm:mt-20 px-8 pb-8 space-y-10  w-full max-w-[1440px] mx-auto">
+    <div className="flex-grow mt-10 md:mt-20 px-8 pb-8 space-y-10  w-full max-w-[1440px] mx-auto">
       {/* Start Artist Details */}
       <div className="flex flex-col sm:flex-row items-center sm:space-x-10">
         <figure className="w-40 h-40 lg:w-56 lg:h-56 rounded-full overflow-hidden">
@@ -114,9 +115,14 @@ function ArtistDetail() {
                   className="flex items-center text-white relative"
                   key={track.id}
                 >
-                  <span className="text-gray-400 absolute left-0">
-                    {index + 1}
-                  </span>
+                  {musicState.currentlyPlaying &&
+                  musicState.currentlyPlaying.id === track.id ? (
+                    <span className="mini-loader" />
+                  ) : (
+                    <span className="text-gray-400 absolute left-2">
+                      {index + 1}
+                    </span>
+                  )}
                   <figure className="w-10 h-10 min-w-10 rounded-md overflow-hidden ml-10">
                     <img
                       src={track.album.images[0].url}

@@ -14,9 +14,7 @@ function SideBar() {
   return (
     <aside className="w-[250px] min-w-[350px] bg-black px-5 py-6 hidden md:flex flex-col justify-between">
       <div>
-        <figure>
-          <img src="/images/spotify_white.svg" alt="spotify" />
-        </figure>
+        <h1 className="text-white font-bold text-3xl">TuneTide</h1>
         <ul className="mt-10 space-y-6">
           <li
             className={`${
