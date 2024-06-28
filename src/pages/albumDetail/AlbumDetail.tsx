@@ -28,7 +28,12 @@ function AlbumDetail() {
       navigate(FileRoutes.LOGIN);
       return;
     }
+
     const selectedMusic = albumTracks[index];
+
+    if (musicState.currentlyPlaying.id === selectedMusic.id) {
+      return;
+    }
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.id,
@@ -124,7 +129,7 @@ function AlbumDetail() {
                 >
                   {musicState.currentlyPlaying &&
                   musicState.currentlyPlaying.id === track.id ? (
-                    <span className="mini-loader" />
+                    <span className="mini-loader absolute left-2" />
                   ) : (
                     <span className="text-gray-400 absolute left-2">
                       {index + 1}

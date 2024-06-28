@@ -28,10 +28,15 @@ function PlaylistDetail() {
       navigate(FileRoutes.LOGIN);
       return;
     }
+
     const selectedMusic = playlistTracks.filter(
       (track: any) =>
         !Object.prototype.hasOwnProperty.call(track.track, "restrictions")
     )[index];
+
+    if (musicState.currentlyPlaying.id === selectedMusic.track.id) {
+      return;
+    }
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.track.id,
@@ -141,8 +146,8 @@ function PlaylistDetail() {
                     key={`${track.track.id}${index}`}
                   >
                     {musicState.currentlyPlaying &&
-                    musicState.currentlyPlaying.id === track.id ? (
-                      <span className="mini-loader" />
+                    musicState.currentlyPlaying.id === track.track.id ? (
+                      <span className="mini-loader absolute left-2" />
                     ) : (
                       <span className="text-gray-400 absolute left-2">
                         {index + 1}
