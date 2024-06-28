@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FileRoutes } from "../utilities/constants/core.constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -71,8 +75,14 @@ function Header() {
   }, [location.pathname]);
 
   return (
-    <header className="w-full bg-transparent hidden sm:flex justify-between items-center space-x-5 p-5 absolute top-0 left-0 right-0">
-      <div className="flex items-center space-x-5">
+    <header
+      className={`w-full bg-transparent ${
+        location.pathname.includes(FileRoutes.SEARCH)
+          ? "flex"
+          : "hidden sm:flex"
+      } justify-between items-center space-x-5 p-5 absolute top-0 left-0 right-0`}
+    >
+      <div className="flex items-center space-x-5 w-full">
         <div className="hidden md:flex items-center space-x-3 text-white">
           <button
             className="bg-black bg-opacity-20 rounded-full p-2 disabled:cursor-not-allowed disabled:opacity-60"
