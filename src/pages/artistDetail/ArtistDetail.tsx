@@ -36,10 +36,13 @@ function ArtistDetail() {
 
     const selectedMusic = artistPopularTracks[index];
 
-    if (musicState.currentlyPlaying.id === selectedMusic.id) {
+    if (
+      musicState.currentlyPlaying &&
+      musicState.currentlyPlaying.id === selectedMusic.id
+    ) {
       return;
     }
-    
+
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.id,

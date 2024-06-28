@@ -34,9 +34,13 @@ function PlaylistDetail() {
         !Object.prototype.hasOwnProperty.call(track.track, "restrictions")
     )[index];
 
-    if (musicState.currentlyPlaying.id === selectedMusic.track.id) {
+    if (
+      musicState.currentlyPlaying &&
+      musicState.currentlyPlaying.id === selectedMusic.track.id
+    ) {
       return;
     }
+    
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.track.id,

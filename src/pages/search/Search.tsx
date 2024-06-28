@@ -17,6 +17,7 @@ function Search() {
   const dispatch = useDispatch();
 
   const authState = useSelector((state: any) => state.Auth);
+  const musicState = useSelector((state: any) => state.MusicList);
 
   const [browseCategories, setBrowseCategories] = useState<any>(null);
 
@@ -33,7 +34,16 @@ function Search() {
       navigate(FileRoutes.LOGIN);
       return;
     }
+    
     const selectedMusic = searchState.searchResult.tracks.items[index];
+
+    if (
+      musicState.currentlyPlaying &&
+      musicState.currentlyPlaying.id === selectedMusic.id
+    ) {
+      return;
+    }
+
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.id,
