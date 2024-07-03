@@ -25,12 +25,22 @@ function App() {
   const [logoutConfirmationOpen, setLogoutConfirmationOpen] =
     useState<boolean>(false);
 
-  const { data: userPlaylistsRes } = useGetUserPlaylistsQuery("1", {
-    skip: !authState.authData,
-  });
+  const { data: userPlaylistsRes } = useGetUserPlaylistsQuery(
+    authState.authData ? authState.authData.id : "",
+    {
+      skip: !authState.authData,
+    }
+  );
 
   useEffect(() => {
     const authData = JSON.parse(localStorage.getItem("user") as string);
+
+    if (authData && !Object.prototype.hasOwnProperty.call(authData, "id")) {
+      localStorage.removeItem("user");
+      dispatch(setAuthData(null));
+      return;
+    }
+    
     if (authData) {
       dispatch(setAuthData(authData));
     }
