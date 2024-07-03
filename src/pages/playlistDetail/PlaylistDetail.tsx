@@ -9,10 +9,11 @@ import { extractColors } from "extract-colors";
 import { useDispatch, useSelector } from "react-redux";
 import { setMusicList } from "../../features/musicList/musicList";
 import { FileRoutes } from "../../core/utilities/constants/core.constants";
+import AddSongToPlaylist from "../../shared/components/AddSongToPlaylist";
 
 function PlaylistDetail() {
   const { playlistId } = useParams();
-  const { data: playlistDatRes } = useGetPlaylistDetailQuery(playlistId!);
+  const { data: playlistDataRes } = useGetPlaylistDetailQuery(playlistId!);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +23,8 @@ function PlaylistDetail() {
   const [playlistData, setPlaylistData] = useState<any>(null);
   const [playlistTracks, setPlaylistTracks] = useState<any>(null);
   const [extractedColors, setExtractedColors] = useState<string[]>([]);
+  const [addSongModalOpen, setAddSongModalOpen] = useState<boolean>(false);
+  const [selectedSong, setSelectedSong] = useState<any>(null);
 
   const handleClick = (index: number) => {
     if (!authState.authData) {
@@ -40,7 +43,7 @@ function PlaylistDetail() {
     ) {
       return;
     }
-    
+
     const dispatchObj = {
       currentlyPlaying: {
         id: selectedMusic.track.id,
@@ -69,129 +72,194 @@ function PlaylistDetail() {
     dispatch(setMusicList(dispatchObj));
   };
 
+  const addSongToPlaylist = (songDetail: any) => {
+    const songObj = {
+      id: songDetail.id,
+      name: songDetail.name,
+      duration_ms: songDetail.duration_ms,
+      artists: songDetail.artists,
+      album: songDetail.album,
+      preview_url: songDetail.preview_url,
+    };
+    setSelectedSong(songObj);
+    setAddSongModalOpen(true);
+  };
+
   useEffect(() => {
-    if (playlistDatRes) {
-      setPlaylistData(playlistDatRes);
-      setPlaylistTracks(
-        playlistDatRes.tracks.items.filter((track: any) => track.track)
-      );
-      extractColors(playlistDatRes.images[0].url, {
-        crossOrigin: "anonymous",
-      }).then((colors) => setExtractedColors(colors.map((color) => color.hex)));
+    if (playlistDataRes) {
+      setPlaylistData(playlistDataRes.data.playlist);
+      setPlaylistTracks(playlistDataRes.data.playlist.tracks.items);
+      if (
+        Object.prototype.hasOwnProperty.call(
+          playlistDataRes.data.playlist,
+          "images"
+        )
+      ) {
+        extractColors(playlistDataRes.data.playlist.images[0].url, {
+          crossOrigin: "anonymous",
+        }).then((colors) =>
+          setExtractedColors(colors.map((color) => color.hex))
+        );
+      } else {
+        setExtractedColors(["#b2beb5", "#b2beb5"]);
+      }
     }
-  }, [playlistDatRes]);
+  }, [playlistDataRes]);
+
+  useEffect(() => {
+    console.log(addSongModalOpen);
+  }, [addSongModalOpen]);
 
   if (!playlistData && !playlistTracks) {
     return <Loader />;
   }
   return (
-    <div
-      className="flex-grow space-y-10"
-      style={{
-        background: extractedColors[1],
-      }}
-    >
-      {/* Start Artist Details */}
-      <div className="pt-10 bg-opacity-40">
-        <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 md:mt-20">
-          <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
-            <img
-              src={playlistData.images[0].url}
-              alt={playlistData.name}
-              className="w-full h-full object-cover aspect-auto"
-            />
-          </figure>
-          <div className="text-white mt-5 sm:mt-0">
-            <span className="text-base capitalize">{playlistData.type}</span>
-            <h2 className="font-bold text-4xl md:text-8xl">
-              {playlistData.name}
-            </h2>
-            <p className="mt-4 text-sm">{playlistData.description}</p>
+    <>
+      <div
+        className="flex-grow space-y-10 flex flex-col"
+        style={{
+          background: extractedColors[1],
+        }}
+      >
+        {/* Start Artist Details */}
+        <div className="pt-10 bg-opacity-40">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-10 px-8 md:mt-20">
+            {playlistData.images ? (
+              <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
+                <img
+                  src={playlistData.images[0].url}
+                  alt={playlistData.name}
+                  className="w-full h-full object-cover aspect-auto"
+                />
+              </figure>
+            ) : (
+              <div className="w-full sm:w-56 h-56 rounded-md overflow-hidden flex justify-center items-center font-semibold text-5xl bg-gray-400 uppercase">
+                {playlistData.name
+                  .split(" ")
+                  .map((name: string) => name.charAt(0))
+                  .join("")}
+              </div>
+            )}
+            <div className="text-white mt-5 sm:mt-0">
+              <span className="text-base capitalize">{playlistData.type}</span>
+              <h2 className="font-bold text-4xl md:text-8xl">
+                {playlistData.name}
+              </h2>
+              <p className="mt-4 text-sm">{playlistData.description}</p>
+            </div>
           </div>
         </div>
-      </div>
-      {/* End Artist Details */}
-      <div className="black-bg py-10">
-        {/* Start play and follow button */}
-        <div className="flex items-center space-x-10 mt-5 px-8">
-          <button
-            className="bg-[#1DB954] w-16 h-16 rounded-full flex justify-center items-center"
-            onClick={() => handleClick(0)}
-          >
-            <PlayIcon className="size-10" />
-          </button>
-          <button className="text-white">
-            <PlusCircleIcon className="w-10 h-10" />
-          </button>
-        </div>
-        {/* End play and follow button */}
-        {/* Start Popular songs */}
-        <div className="mt-5 px-8">
-          <div className="flex items-center text-gray-400 relative border-b border-b-gray-500 pb-2 mt-10">
-            <span className="text-gray-400 absolute left-0">#</span>
-            <div className="w-full lg:min-w-80 text-left ml-8">Title</div>
-            <p className="ml-5">
-              <ClockIcon className="w-6 h-6" />
-            </p>
-          </div>
-          <div className="mt-5 space-y-6">
-            {playlistTracks
-              .filter(
-                (track: any) =>
-                  !Object.prototype.hasOwnProperty.call(
-                    track.track,
-                    "restrictions"
+        {/* End Artist Details */}
+        {playlistTracks.length > 0 ? (
+          <div className="black-bg py-10 flex-grow">
+            {/* Start play and follow button */}
+            <div className="flex items-center space-x-10 mt-5 px-8">
+              <button
+                className="bg-[#1DB954] w-16 h-16 rounded-full flex justify-center items-center"
+                onClick={() => handleClick(0)}
+              >
+                <PlayIcon className="size-10" />
+              </button>
+              {!Object.prototype.hasOwnProperty.call(
+                playlistData,
+                "user_id"
+              ) && (
+                <button className="text-white">
+                  <PlusCircleIcon className="w-10 h-10" />
+                </button>
+              )}
+            </div>
+            {/* End play and follow button */}
+            {/* Start Popular songs */}
+            <div className="mt-5 px-8">
+              <div className="flex items-center text-gray-400 relative border-b border-b-gray-500 pb-2 mt-10">
+                <span className="text-gray-400 absolute left-0">#</span>
+                <div className="w-full lg:min-w-80 text-left ml-8">Title</div>
+                <p className="ml-5 hidden md:block">
+                  <ClockIcon className="w-6 h-6" />
+                </p>
+              </div>
+              <div className="mt-5 space-y-4">
+                {playlistTracks
+                  .filter(
+                    (track: any) =>
+                      !Object.prototype.hasOwnProperty.call(
+                        track.track,
+                        "restrictions"
+                      )
                   )
-              )
-              .map((track: any, index: number) => {
-                return (
-                  <div
-                    className="flex items-center text-white relative"
-                    key={`${track.track.id}${index}`}
-                  >
-                    {musicState.currentlyPlaying &&
-                    musicState.currentlyPlaying.id === track.track.id ? (
-                      <span className="mini-loader absolute left-2" />
-                    ) : (
-                      <span className="text-gray-400 absolute left-2">
-                        {index + 1}
-                      </span>
-                    )}
-                    <figure className="w-10 h-10 min-w-10 rounded-md overflow-hidden ml-10">
-                      <img
-                        src={track.track.album.images[0]?.url}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
-                    </figure>
-                    <button
-                      className="w-full md:min-w-80 text-left ml-8"
-                      onClick={() => handleClick(index)}
-                    >
-                      <p className="font-semibold">{track.track.name}</p>
-                      <p className="text-sm text-gray-400">
-                        {track.track.artists
-                          .map((artist: any) => artist.name)
-                          .join(", ")}
-                      </p>
-                    </button>
-                    <p className="ml-5 hidden md:block">{`${Math.floor(
-                      track.track.duration_ms / 1000 / 60
-                    )}:${
-                      Math.floor((track.track.duration_ms / 1000) % 60) > 9
-                        ? Math.floor((track.track.duration_ms / 1000) % 60)
-                        : `0${Math.floor(
-                            (track.track.duration_ms / 1000) % 60
-                          )}`
-                    }`}</p>
-                  </div>
-                );
-              })}
+                  .map((track: any, index: number) => {
+                    return (
+                      <div
+                        className="flex items-center text-white relative group hover:bg-white hover:bg-opacity-10 p-2 rounded-md transition-colors"
+                        key={`${track.track.id}${index}`}
+                      >
+                        {musicState.currentlyPlaying &&
+                        musicState.currentlyPlaying.id === track.track.id ? (
+                          <span className="mini-loader absolute left-2" />
+                        ) : (
+                          <span className="text-gray-400 absolute left-2">
+                            {index + 1}
+                          </span>
+                        )}
+                        <figure className="w-10 h-10 min-w-10 rounded-md overflow-hidden ml-10">
+                          <img
+                            src={track.track.album.images[0]?.url}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        </figure>
+                        <button
+                          className="w-full lg:min-w-80 text-left ml-8"
+                          onClick={() => handleClick(index)}
+                        >
+                          <p className="font-semibold line-clamp-2">{track.track.name}</p>
+                          <p className="text-sm text-gray-400 line-clamp-2">
+                            {track.track.artists
+                              .map((artist: any) => artist.name)
+                              .join(", ")}
+                          </p>
+                        </button>
+                        {!Object.prototype.hasOwnProperty.call(
+                          playlistData,
+                          "user_id"
+                        ) && (
+                          <button
+                            className="lg:invisible lg:group-hover:visible ml-4"
+                            onClick={() => addSongToPlaylist(track.track)}
+                          >
+                            <PlusCircleIcon className="w-6 h-6 text-white" />
+                          </button>
+                        )}
+                        <p className="ml-5 hidden md:block">{`${Math.floor(
+                          track.track.duration_ms / 1000 / 60
+                        )}:${
+                          Math.floor((track.track.duration_ms / 1000) % 60) > 9
+                            ? Math.floor((track.track.duration_ms / 1000) % 60)
+                            : `0${Math.floor(
+                                (track.track.duration_ms / 1000) % 60
+                              )}`
+                        }`}</p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+            {/* End Popular songs */}
           </div>
-        </div>
-        {/* End Popular songs */}
+        ) : (
+          <h5 className="text-white text-3xl px-8">
+            No songs added to this playlist yet...
+          </h5>
+        )}
       </div>
-    </div>
+      {addSongModalOpen && (
+        <AddSongToPlaylist
+          setAddSongModalOpen={setAddSongModalOpen}
+          selectedSong={selectedSong}
+        />
+      )}
+    </>
   );
 }
 

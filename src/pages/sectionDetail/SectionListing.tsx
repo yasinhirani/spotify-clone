@@ -26,8 +26,8 @@ function SectionListing() {
       setSectionDetail(sectionDetailRes.data);
     } else if (sectionPlaylistDetailRes) {
       const detail = {
-        title: sectionPlaylistDetailRes.message,
-        items: sectionPlaylistDetailRes.playlists.items,
+        title: sectionPlaylistDetailRes.data.featuredPlaylists.message,
+        items: sectionPlaylistDetailRes.data.featuredPlaylists.playlists.items,
       };
       setSectionDetail(detail);
     }

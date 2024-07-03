@@ -8,6 +8,7 @@ enum FileRoutes {
   ARTIST = "/artist",
   ALBUM = "/album",
   PLAYLIST = "/playlist",
+  MY_PLAYLIST = "/my-playlist",
 }
 
 export { FileRoutes };

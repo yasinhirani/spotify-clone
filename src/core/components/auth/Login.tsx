@@ -13,7 +13,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { data: loginRes }] = useLoginMutation();
+  const [login, { data: loginRes, isLoading }] = useLoginMutation();
 
   const initialValues = {
     email: "",
@@ -86,9 +86,10 @@ function Login() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors"
+                  className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors disabled:opacity-60"
+                  disabled={isLoading}
                 >
-                  Login
+                  {isLoading ? "Logging In" : "Login"}
                 </button>
                 <p className="text-center text-white">
                   Don't have an account?{" "}

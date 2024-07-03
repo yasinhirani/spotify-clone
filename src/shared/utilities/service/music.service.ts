@@ -14,19 +14,7 @@ const musicApi = createApi({
         url: `/api/search/songs?query=${musicName}`,
         method: "GET",
       }),
-    }),
-    // getMusicUrl: builder.mutation<any, any>({
-    //   query: (data: any) => ({
-    //     url: "/getsong",
-    //     method: "POST",
-    //     data,
-    //     headers: {
-    //       "x-rapidapi-key":
-    //         "b270c8a6c1mshfa428feb3857501p110f3cjsn471755706752",
-    //       "x-rapidapi-host": "jio-saavan-unofficial.p.rapidapi.com",
-    //     },
-    //   }),
-    // }),
+    })
   }),
 });
 
