@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 function Signup() {
   const navigate = useNavigate();
 
-  const [signup] = useSignupMutation();
+  const [signup, { isLoading }] = useSignupMutation();
 
   const initialValues = {
     name: "",
@@ -108,8 +108,12 @@ function Signup() {
                     </p>
                   ) : null}
                 </div>
-                <button type="submit" className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors">
-                  Signup
+                <button
+                  type="submit"
+                  className="w-full text-white font-semibold text-xl p-3 rounded-3xl border border-white hover:text-black hover:bg-white transition-colors disabled:opacity-60"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing Up" : "Signup"}
                 </button>
                 <p className="text-center text-white">
                   Already have an account?{" "}

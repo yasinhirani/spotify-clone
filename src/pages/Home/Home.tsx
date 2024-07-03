@@ -11,6 +11,7 @@ import {
 
 function Home() {
   const navigate = useNavigate();
+
   const { data: homepageDataRes, isLoading } = useGetHomePageDataQuery();
   const { data: featuredPlaylistDataRes } = useGetFeaturedPlaylistDataQuery(5);
   const [homepageData, setHomepageData] = useState<any>(null);
@@ -22,19 +23,22 @@ function Home() {
         title: featuredPlaylistDataRes.message,
         type: "playlist",
         contents: {
-          items: featuredPlaylistDataRes.playlists.items.map((item: any) => {
-            return {
-              id: item.id,
-              name: item.name,
-              type: item.type,
-              description: item.description,
-              images: [
-                {
-                  url: item.images[0].url,
-                },
-              ],
-            };
-          }),
+          items:
+            featuredPlaylistDataRes.playlists.items.map(
+              (item: any) => {
+                return {
+                  id: item.id,
+                  name: item.name,
+                  type: item.type,
+                  description: item.description,
+                  images: [
+                    {
+                      url: item.images[0].url,
+                    },
+                  ],
+                };
+              }
+            ),
         },
       };
       setHomepageData([featuredPlaylist, ...homepageDataRes.data.items]);

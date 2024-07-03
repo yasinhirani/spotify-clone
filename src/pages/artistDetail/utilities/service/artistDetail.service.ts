@@ -5,19 +5,19 @@ import axiosBaseQuery from "../../../../core/utilities/service/axios.service";
 const artistDetailApi = createApi({
   reducerPath: "ArtistDetail",
   baseQuery: axiosBaseQuery({
-    baseUrl: import.meta.env.VITE_SPOTIFY_BASE_URL,
+    baseUrl: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api`,
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
     getArtistDetail: builder.query<any, string>({
       query: (id: string) => ({
-        url: `/v1/artists/${id}`,
+        url: `/artist/${id}`,
         method: "GET",
       }),
     }),
     getArtistPopularTracks: builder.query<any, string>({
       query: (id: string) => ({
-        url: `/v1/artists/${id}/top-tracks`,
+        url: `/artist/${id}/top-tracks`,
         method: "GET",
       }),
     }),

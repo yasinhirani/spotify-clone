@@ -5,35 +5,26 @@ import axiosBaseQuery from "../../../../core/utilities/service/axios.service";
 const homepageApi = createApi({
   reducerPath: "HomePage",
   baseQuery: axiosBaseQuery({
-    baseUrl: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api`,
+    baseUrl: "",
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
     getHomePageData: builder.query<any, void>({
       query: () => ({
-        url: "/homepage",
+        url: `${import.meta.env.VITE_TUNETIDE_BASE_URL}/api/homepage`,
         method: "GET",
       }),
     }),
-  }),
-});
-
-const featuredPlaylistApi = createApi({
-  reducerPath: "FeaturedPlaylist",
-  baseQuery: axiosBaseQuery({
-    baseUrl: import.meta.env.VITE_SPOTIFY_BASE_URL,
-  }),
-  keepUnusedDataFor: 14400,
-  endpoints: (builder) => ({
     getFeaturedPlaylistData: builder.query<any, number>({
       query: (limit: number) => ({
-        url: `/v1/browse/featured-playlists?locale=en_IN&limit=${limit}&offset=0`,
+        url: `https://api.spotify.com/v1/browse/featured-playlists?locale=en_IN&limit=${limit}&offset=0`,
         method: "GET",
       }),
     }),
   }),
 });
 
-export const { useGetHomePageDataQuery } = homepageApi;
-export const { useGetFeaturedPlaylistDataQuery } = featuredPlaylistApi;
-export { homepageApi, featuredPlaylistApi };
+export const { useGetHomePageDataQuery, useGetFeaturedPlaylistDataQuery } =
+  homepageApi;
+
+export { homepageApi };

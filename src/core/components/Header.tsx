@@ -10,12 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 import debounce from "../../shared/utilities/functions/function";
 import { useLazyGetSearchResultQuery } from "../../pages/search/utilities/service/search.service";
 import { setSearchResult } from "../../features/search/search";
-import { setAuthData } from "../../features/auth/auth";
-import toast from "react-hot-toast";
 import { useEffect, useRef } from "react";
 // import { useLazyCreateSubscriptionQuery } from "../utilities/service/core.service";
 
-function Header() {
+interface IProps {
+  setLogoutConfirmationOpen: (open: boolean) => void;
+}
+
+function Header({setLogoutConfirmationOpen}: IProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,17 +33,11 @@ function Header() {
   const handleSearch = async (searchValue: string) => {
     if (searchValue !== "") {
       await getSearchResult(searchValue).then((res) => {
-        dispatch(setSearchResult(res.data));
+        dispatch(setSearchResult(res.data.data.result));
       });
     } else {
       dispatch(setSearchResult(null));
     }
-  };
-
-  const handleLogout = () => {
-    dispatch(setAuthData(null));
-    localStorage.removeItem("user");
-    toast.success("Logout Successfully");
   };
 
   // const handlePremiumClick = async () => {
@@ -124,7 +120,7 @@ function Header() {
           </button> */}
           <button
             className="text-sm bg-white text-black px-5 py-2 rounded-3xl font-semibold"
-            onClick={handleLogout}
+            onClick={() => setLogoutConfirmationOpen(true)}
           >
             Logout
           </button>
