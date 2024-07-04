@@ -16,17 +16,17 @@ function MyPlaylist() {
       <div className="mt-10 md:mt-28 px-4 pb-8">
         <h4 className="text-white font-semibold text-2xl">Your Playlists</h4>
         <button
-          className="flex items-center space-x-4 text-gray-300 hover:text-white group mt-6"
+          className="flex items-center space-x-4 text-white mt-6"
           onClick={() => dispatch(setModalOpen(true))}
         >
-          <div className="bg-gray-300 group-hover:bg-white p-1 rounded">
+          <div className="bg-white p-1 rounded">
             <PlusIcon className="w-6 h-6 text-black" />
           </div>
           <span className="font-semibold">Create Playlist</span>
         </button>
         {userPlaylistState.userPlaylists &&
           userPlaylistState.userPlaylists.length > 0 && (
-            <div className="flex flex-col mt-8">
+            <div className="flex flex-col space-y-5 mt-8">
               {userPlaylistState.userPlaylists.map((playlist: any) => {
                 return (
                   <button
