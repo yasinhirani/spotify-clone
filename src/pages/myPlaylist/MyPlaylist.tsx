@@ -9,15 +9,24 @@ function MyPlaylist() {
   const navigate = useNavigate();
 
   const userPlaylistState = useSelector((state: any) => state.UserPlaylists);
+  const authState = useSelector((state: any) => state.Auth);
 
   const dispatch = useDispatch();
+
+  const handleCreatePlaylistClick = () => {
+    if (!authState.authData) {
+      navigate(FileRoutes.LOGIN);
+      return;
+    }
+    dispatch(setModalOpen(true));
+  };
   return (
     <div className="flex-grow">
       <div className="mt-10 md:mt-28 px-4 pb-8">
         <h4 className="text-white font-semibold text-2xl">Your Playlists</h4>
         <button
           className="flex items-center space-x-4 text-white mt-6"
-          onClick={() => dispatch(setModalOpen(true))}
+          onClick={handleCreatePlaylistClick}
         >
           <div className="bg-white p-1 rounded">
             <PlusIcon className="w-6 h-6 text-black" />
