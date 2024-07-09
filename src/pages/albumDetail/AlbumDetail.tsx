@@ -100,7 +100,7 @@ function AlbumDetail() {
         {/* Start Artist Details */}
         <div className="pt-10 bg-opacity-40">
           <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 md:mt-20">
-            <figure className="w-56 h-56 rounded-md overflow-hidden">
+            <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
               <img
                 src={albumData.images[0].url}
                 alt={albumData.name}
