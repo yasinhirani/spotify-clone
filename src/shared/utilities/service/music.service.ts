@@ -11,7 +11,7 @@ const musicApi = createApi({
   endpoints: (builder) => ({
     getMusicData: builder.query<any, string>({
       query: (musicName: string) => ({
-        url: `/api/search/songs?query=${musicName}`,
+        url: `/api/search/song?query=${musicName}`,
         method: "GET",
       }),
     })
