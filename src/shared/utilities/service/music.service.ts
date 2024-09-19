@@ -5,7 +5,7 @@ import axiosBaseQuery from "../../../core/utilities/service/axios.service";
 const musicApi = createApi({
   reducerPath: "MusicApi",
   baseQuery: axiosBaseQuery({
-    baseUrl: "https://saavn.dev",
+    baseUrl: `${import.meta.env.VITE_TUNETIDE_BASE_URL}`,
   }),
   keepUnusedDataFor: 14400,
   endpoints: (builder) => ({
