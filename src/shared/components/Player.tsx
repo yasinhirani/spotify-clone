@@ -162,6 +162,11 @@ function Player() {
   // };
 
   useEffect(() => {
+    setUrl("");
+    setDuration({
+      minutes: "0",
+      seconds: "00",
+    });
     setMediaLoading(true);
     if (musicData) {
       const perfectUrl = musicData.data.results.findIndex((track: any) => {
@@ -194,14 +199,6 @@ function Player() {
       navigator.mediaSession.setActionHandler("previoustrack", null);
       navigator.mediaSession.metadata = null;
       clearInterval(intervalRef.current);
-      if(audioRef.current){
-        audioRef.current.currentTime = 0;
-      }
-      setUrl("");
-      setDuration({
-        minutes: "0",
-        seconds: "00",
-      });
     };
   }, [musicData, musicState.currentlyPlaying]);
 
