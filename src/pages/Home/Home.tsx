@@ -4,48 +4,21 @@ import HomePageListCard from "../../shared/components/HomePageListCard";
 import Loader from "../../shared/components/Loader";
 import { useNavigate } from "react-router-dom";
 import { FileRoutes } from "../../core/utilities/constants/core.constants";
-import {
-  useGetFeaturedPlaylistDataQuery,
-  useGetHomePageDataQuery,
-} from "./utilities/service/home.service";
+import { useGetHomePageDataQuery } from "./utilities/service/home.service";
 
 function Home() {
   const navigate = useNavigate();
 
   const { data: homepageDataRes, isLoading } = useGetHomePageDataQuery();
-  const { data: featuredPlaylistDataRes } = useGetFeaturedPlaylistDataQuery(5);
   const [homepageData, setHomepageData] = useState<any>(null);
 
   useEffect(() => {
-    if (homepageDataRes && featuredPlaylistDataRes) {
-      const featuredPlaylist = {
-        id: 5,
-        title: featuredPlaylistDataRes.message,
-        type: "playlist",
-        contents: {
-          items:
-            featuredPlaylistDataRes.playlists.items.map(
-              (item: any) => {
-                return {
-                  id: item.id,
-                  name: item.name,
-                  type: item.type,
-                  description: item.description,
-                  images: [
-                    {
-                      url: item.images[0].url,
-                    },
-                  ],
-                };
-              }
-            ),
-        },
-      };
-      setHomepageData([featuredPlaylist, ...homepageDataRes.data.items]);
+    if (homepageDataRes) {
+      setHomepageData(homepageDataRes.data.items);
     }
-  }, [homepageDataRes, featuredPlaylistDataRes]);
+  }, [homepageDataRes]);
 
-  if (isLoading || !featuredPlaylistDataRes) {
+  if (isLoading) {
     return <Loader />;
   }
 
