@@ -34,7 +34,7 @@ function Search() {
       navigate(FileRoutes.LOGIN);
       return;
     }
-    
+
     const selectedMusic = searchState.searchResult.tracks.items[index];
 
     if (
@@ -223,7 +223,7 @@ function Search() {
             <h2 className="font-bold text-2xl text-white">Playlists</h2>
             <div className="mt-5 scroll-card-grid">
               {searchState.searchResult.playlists.items.map((playlist: any) => {
-                return (
+                return playlist ? (
                   <HomePageListCard
                     key={playlist.id}
                     id={playlist.id}
@@ -232,7 +232,7 @@ function Search() {
                     type={playlist.type}
                     description={playlist.description}
                   />
-                );
+                ) : null;
               })}
             </div>
           </div>
