@@ -3,8 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
-import { ClockIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import { useGetPlaylistDetailQuery } from "./utilities/service/playlistDetail.service";
+import {
+  ClockIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import {
+  useDeleteSongFromUserPlaylistMutation,
+  useGetPlaylistDetailQuery,
+} from "./utilities/service/playlistDetail.service";
 import { extractColors } from "extract-colors";
 import { useDispatch, useSelector } from "react-redux";
 import { setMusicList } from "../../features/musicList/musicList";
@@ -25,6 +32,8 @@ function PlaylistDetail() {
   const [extractedColors, setExtractedColors] = useState<string[]>([]);
   const [addSongModalOpen, setAddSongModalOpen] = useState<boolean>(false);
   const [selectedSong, setSelectedSong] = useState<any>(null);
+
+  const [deleteSongFromUserPlaylist] = useDeleteSongFromUserPlaylistMutation();
 
   const handleClick = (index: number) => {
     if (!authState.authData) {
@@ -83,6 +92,10 @@ function PlaylistDetail() {
     };
     setSelectedSong(songObj);
     setAddSongModalOpen(true);
+  };
+
+  const deleteSong = async (songId: string) => {
+    await deleteSongFromUserPlaylist(songId).unwrap();
   };
 
   useEffect(() => {
@@ -213,7 +226,9 @@ function PlaylistDetail() {
                           className="w-full lg:min-w-80 text-left ml-8"
                           onClick={() => handleClick(index)}
                         >
-                          <p className="font-semibold line-clamp-2">{track.track.name}</p>
+                          <p className="font-semibold line-clamp-2">
+                            {track.track.name}
+                          </p>
                           <p className="text-sm text-gray-400 line-clamp-2">
                             {track.track.artists
                               .map((artist: any) => artist.name)
@@ -229,6 +244,17 @@ function PlaylistDetail() {
                             onClick={() => addSongToPlaylist(track.track)}
                           >
                             <PlusCircleIcon className="w-6 h-6 text-white" />
+                          </button>
+                        )}
+                        {Object.prototype.hasOwnProperty.call(
+                          playlistData,
+                          "user_id"
+                        ) && (
+                          <button
+                            className="lg:invisible lg:group-hover:visible ml-4"
+                            onClick={() => deleteSong(track.track.id)}
+                          >
+                            <TrashIcon className="w-5 h-5 text-white" />
                           </button>
                         )}
                         <p className="ml-5 hidden md:block">{`${Math.floor(
