@@ -27,8 +27,19 @@ const playlistDetailApi = createApi({
       }),
       invalidatesTags: ["Playlist"],
     }),
+    deleteSongFromUserPlaylist: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/user-playlist/${id}/deleteSong`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ['Playlist']
+    }),
   }),
 });
 
-export const { useGetPlaylistDetailQuery, useAddSongToUserPlaylistMutation } = playlistDetailApi;
+export const {
+  useGetPlaylistDetailQuery,
+  useAddSongToUserPlaylistMutation,
+  useDeleteSongFromUserPlaylistMutation,
+} = playlistDetailApi;
 export default playlistDetailApi;
