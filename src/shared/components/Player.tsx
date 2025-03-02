@@ -174,7 +174,7 @@ function Player() {
           (artist: any) => artist.name === musicState.currentlyPlaying.artist[0]
         );
       });
-      setMusicUrl(musicData.data.results[perfectUrl !== -1 ? perfectUrl : 0]);
+      setMusicUrl(perfectUrl !== -1 ? musicData.data.results[perfectUrl] : null);
     }
 
     if ("mediaSession" in navigator) {
