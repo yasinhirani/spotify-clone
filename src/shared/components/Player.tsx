@@ -4,7 +4,7 @@ import { PauseCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
 import PreviousIcon from "./PreviousIcon";
 import NextIcon from "./NextIcon";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetMusicDataQuery } from "../utilities/service/music.service";
+import { fetchAlternateMusicUrl, useGetMusicDataQuery } from "../utilities/service/music.service";
 import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { setMusicList } from "../../features/musicList/musicList";
@@ -143,7 +143,12 @@ function Player() {
     if (musicData) {
       setUrl(musicData.downloadUrl[3].url);
     } else {
-      setUrl(musicState.currentlyPlaying.preview_url);
+      const alternateUrl = await fetchAlternateMusicUrl(musicState.currentlyPlaying.id);
+      if(alternateUrl){
+        setUrl(alternateUrl.download_url)
+      } else {
+        setUrl(musicState.currentlyPlaying.preview_url);
+      }
     }
   };
 
