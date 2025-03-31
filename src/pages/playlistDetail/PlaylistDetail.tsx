@@ -119,10 +119,6 @@ function PlaylistDetail() {
     }
   }, [playlistDataRes]);
 
-  useEffect(() => {
-    console.log(addSongModalOpen);
-  }, [addSongModalOpen]);
-
   if (!playlistData && !playlistTracks) {
     return <Loader />;
   }
