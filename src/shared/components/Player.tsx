@@ -4,7 +4,10 @@ import { PauseCircleIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
 import PreviousIcon from "./PreviousIcon";
 import NextIcon from "./NextIcon";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAlternateMusicUrl, useGetMusicDataQuery } from "../utilities/service/music.service";
+import {
+  useLazyGetAlternateUrlQuery,
+  useLazyGetMusicDataQuery,
+} from "../utilities/service/music.service";
 import { useEffect, useRef, useState } from "react";
 import Loader from "./Loader";
 import { setMusicList } from "../../features/musicList/musicList";
@@ -13,10 +16,8 @@ import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 function Player() {
   const musicState = useSelector((state: any) => state.MusicList);
 
-  const { data: musicData } = useGetMusicDataQuery(
-    musicState.currentlyPlaying.name,
-    { skip: !musicState.currentlyPlaying }
-  );
+  const [getMusicData] = useLazyGetMusicDataQuery();
+  const [getAlternateUrl] = useLazyGetAlternateUrlQuery();
   const dispatch = useDispatch();
 
   const [url, setUrl] = useState<string>("");
@@ -137,15 +138,18 @@ function Player() {
     if (audioRef.current) {
       audioRef.current.volume = e.target.value / 100;
     }
-  }
+  };
 
   const setMusicUrl = async (musicData: any) => {
     if (musicData) {
       setUrl(musicData.downloadUrl[3].url);
     } else {
-      const alternateUrl = await fetchAlternateMusicUrl(musicState.currentlyPlaying.id);
-      if(alternateUrl){
-        setUrl(alternateUrl.download_url)
+      const alternateUrl = await getAlternateUrl({
+        songName: musicState.currentlyPlaying.name,
+        artistName: musicState.currentlyPlaying.artist[0],
+      }).unwrap();
+      if (alternateUrl) {
+        setUrl(alternateUrl?.data?.url);
       } else {
         setUrl(musicState.currentlyPlaying.preview_url);
       }
@@ -173,14 +177,25 @@ function Player() {
       seconds: "00",
     });
     setMediaLoading(true);
-    if (musicData) {
-      const perfectUrl = musicData.data.results.findIndex((track: any) => {
-        return track.artists.primary.some(
-          (artist: any) => artist.name === musicState.currentlyPlaying.artist[0]
+
+    const getSongUrl = async () => {
+      const musicData = await getMusicData(
+        musicState.currentlyPlaying.name
+      ).unwrap();
+      if (musicData) {
+        const perfectUrl = musicData.data.results.findIndex((track: any) => {
+          return track.artists.primary.some(
+            (artist: any) =>
+              artist.name === musicState.currentlyPlaying.artist[0]
+          );
+        });
+        setMusicUrl(
+          perfectUrl !== -1 ? musicData.data.results[perfectUrl] : null
         );
-      });
-      setMusicUrl(perfectUrl !== -1 ? musicData.data.results[perfectUrl] : null);
-    }
+      }
+    };
+
+    getSongUrl();
 
     if ("mediaSession" in navigator) {
       navigator.mediaSession.setActionHandler("play", handlePlay);
@@ -205,7 +220,7 @@ function Player() {
       navigator.mediaSession.metadata = null;
       clearInterval(intervalRef.current);
     };
-  }, [musicData, musicState.currentlyPlaying]);
+  }, [musicState.currentlyPlaying]);
 
   if (!url) {
     return (
