@@ -134,7 +134,7 @@ function PlaylistDetail() {
         <div className="pt-10 bg-opacity-40">
           <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-10 px-8 md:mt-20">
             {playlistData.images ? (
-              <figure className="w-full h-full sm:w-56 rounded-md overflow-hidden">
+              <figure className="w-full h-full sm:w-48 rounded-md overflow-hidden">
                 <img
                   src={playlistData.images[0].url}
                   alt={playlistData.name}
@@ -142,7 +142,7 @@ function PlaylistDetail() {
                 />
               </figure>
             ) : (
-              <div className="w-full sm:w-56 h-56 rounded-md overflow-hidden flex justify-center items-center font-semibold text-5xl bg-gray-400 uppercase">
+              <div className="w-full sm:w-48 h-48 rounded-md overflow-hidden flex justify-center items-center font-semibold text-4xl bg-gray-400 uppercase">
                 {playlistData.name
                   .split(" ")
                   .map((name: string) => name.charAt(0))
