@@ -132,13 +132,13 @@ function PlaylistDetail() {
       >
         {/* Start Artist Details */}
         <div className="pt-10 bg-opacity-40">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-10 px-8 md:mt-20">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-10 px-8 md:mt-20">
             {playlistData.images ? (
-              <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
+              <figure className="w-full h-full sm:w-56 rounded-md overflow-hidden">
                 <img
                   src={playlistData.images[0].url}
                   alt={playlistData.name}
-                  className="w-full h-full object-cover aspect-auto"
+                  className="w-full h-full object-cover aspect-square"
                 />
               </figure>
             ) : (
@@ -151,10 +151,10 @@ function PlaylistDetail() {
             )}
             <div className="text-white mt-5 sm:mt-0">
               <span className="text-base capitalize">{playlistData.type}</span>
-              <h2 className="font-bold text-4xl md:text-8xl">
+              <h2 className="font-bold text-4xl">
                 {playlistData.name}
               </h2>
-              <p className="mt-4 text-sm">{playlistData.description}</p>
+              <p className="mt-2 text-sm">{playlistData.description}</p>
             </div>
           </div>
         </div>

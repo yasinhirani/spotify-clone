@@ -99,20 +99,20 @@ function AlbumDetail() {
       >
         {/* Start Artist Details */}
         <div className="pt-10 bg-opacity-40">
-          <div className="flex flex-col sm:flex-row items-center sm:space-x-10 px-8 md:mt-20">
-            <figure className="w-full h-full sm:w-56 sm:h-56 rounded-md overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-end sm:space-x-10 px-8 md:mt-20">
+            <figure className="w-full h-full sm:w-56 rounded-md overflow-hidden">
               <img
                 src={albumData.images[0].url}
                 alt={albumData.name}
-                className="w-full h-full object-cover aspect-auto"
+                className="w-full h-full object-cover aspect-square"
               />
             </figure>
             <div className="text-white mt-5 sm:mt-0">
               <span className="text-base capitalize">{albumData.type}</span>
-              <h2 className="font-bold text-4xl md:text-8xl">
+              <h2 className="font-bold text-4xl">
                 {albumData.name}
               </h2>
-              <p className="mt-4 text-sm">
+              <p className="mt-2 text-sm">
                 {albumData.artists
                   .map((artist: any) => artist.name)
                   .join(" • ")}
