@@ -4,8 +4,8 @@ import "./index.css";
 import AppRoutes from "./AppRoutes.tsx";
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
-import Interceptor from "./core/utilities/service/interceptor.ts";
 import { Toaster } from "react-hot-toast";
+import Interceptor from "./core/utilities/service/interceptor.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

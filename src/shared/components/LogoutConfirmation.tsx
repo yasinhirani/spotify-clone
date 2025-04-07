@@ -14,6 +14,7 @@ function LogoutConfirmation({ setLogoutConfirmationOpen }: IProps) {
   const handleLogout = () => {
     dispatch(setAuthData(null));
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     dispatch(setUserPlaylists(null));
     toast.success("Logout Successfully");
     setLogoutConfirmationOpen(false);
