@@ -20,7 +20,7 @@ import AddSongToPlaylist from "../../shared/components/AddSongToPlaylist";
 
 function PlaylistDetail() {
   const { playlistId } = useParams();
-  const { data: playlistDataRes } = useGetPlaylistDetailQuery(playlistId!);
+  const { data: playlistDataRes, isLoading, isFetching } = useGetPlaylistDetailQuery(playlistId!);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -119,12 +119,12 @@ function PlaylistDetail() {
     }
   }, [playlistDataRes]);
 
-  if (!playlistData && !playlistTracks) {
+  if (isLoading || isFetching) {
     return <Loader />;
   }
   return (
     <>
-      <div
+      {playlistData && <div
         className="flex-grow space-y-10 flex flex-col"
         style={{
           background: extractedColors[1],
@@ -274,7 +274,7 @@ function PlaylistDetail() {
             No songs added to this playlist yet...
           </h5>
         )}
-      </div>
+      </div>}
       {addSongModalOpen && (
         <AddSongToPlaylist
           setAddSongModalOpen={setAddSongModalOpen}
