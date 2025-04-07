@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SideBar from "./core/components/SideBar";
 import Header from "./core/components/Header";
 import Player from "./shared/components/Player";
@@ -12,8 +12,11 @@ import CreatePlaylist from "./shared/components/CreatePlaylist";
 import { useGetUserPlaylistsQuery } from "./core/utilities/service/core.service";
 import { setUserPlaylists } from "./features/userPlaylist/userPlaylist";
 import LogoutConfirmation from "./shared/components/LogoutConfirmation";
+import { setNavigate } from "./core/utilities/helpers/navigate";
 
 function App() {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   const musicState = useSelector((state: any) => state.MusicList);
@@ -40,7 +43,9 @@ function App() {
       dispatch(setAuthData(null));
       return;
     }
-    
+
+    setNavigate(navigate);
+
     if (authData) {
       dispatch(setAuthData(authData));
     }
