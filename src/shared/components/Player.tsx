@@ -222,6 +222,12 @@ function Player() {
     };
   }, [musicState.currentlyPlaying]);
 
+  useEffect(() => {
+    if(url){
+      audioRef.current.volume = volume / 100
+    }
+  }, [url])
+
   if (!url) {
     return (
       <div className="bg-black px-8 py-4 flex justify-center">
