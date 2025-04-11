@@ -22,7 +22,7 @@ function MyPlaylist() {
   };
   return (
     <div className="flex-grow">
-      <div className="mt-10 md:mt-28 px-4 pb-8">
+      <div className="mt-4 md:mt-28 px-4 pb-8">
         <h4 className="text-white font-semibold text-2xl">Your Playlists</h4>
         <button
           className="flex items-center space-x-4 text-white mt-6"
