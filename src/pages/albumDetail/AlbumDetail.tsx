@@ -139,9 +139,9 @@ function AlbumDetail() {
             >
               <PlayIcon className="size-10" />
             </button>
-            <button className="text-white">
+            {/* <button className="text-white">
               <PlusCircleIcon className="w-10 h-10" />
-            </button>
+            </button> */}
           </div>
           {/* End play and follow button */}
           {/* Start Popular songs */}

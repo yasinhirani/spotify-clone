@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  GlobeAltIcon,
   HomeIcon,
   MagnifyingGlassIcon,
   PlusIcon,
@@ -97,12 +96,12 @@ function SideBar() {
           </div>
         </div>
       </div>
-      <footer>
+      {/* <footer>
         <button className="flex items-center space-x-2 border border-gray-400 rounded-3xl px-4 py-2 text-white">
           <GlobeAltIcon className="w-6 h-6" />
           <span className="font-semibold">English</span>
         </button>
-      </footer>
+      </footer> */}
     </aside>
   );
 }

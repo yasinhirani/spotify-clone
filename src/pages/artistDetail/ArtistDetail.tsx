@@ -127,9 +127,9 @@ function ArtistDetail() {
           >
             <PlayIcon className="size-10" />
           </button>
-          <button className="text-white border border-gray-400 px-8 py-2 rounded-3xl">
+          {/* <button className="text-white border border-gray-400 px-8 py-2 rounded-3xl">
             Follow
-          </button>
+          </button> */}
         </div>
         {/* End play and follow button */}
         {/* Start Popular songs */}
