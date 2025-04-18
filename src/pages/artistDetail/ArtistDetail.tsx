@@ -165,12 +165,12 @@ function ArtistDetail() {
                     >
                       {track.name}
                     </button>
-                    <button
+                    {authState.authData && <button
                       className="lg:invisible lg:group-hover:visible ml-4"
                       onClick={() => addSongToPlaylist(track)}
                     >
                       <PlusCircleIcon className="w-6 h-6 text-white" />
-                    </button>
+                    </button>}
 
                     <p className="ml-5 hidden sm:block">{`${Math.floor(
                       track.duration_ms / 1000 / 60

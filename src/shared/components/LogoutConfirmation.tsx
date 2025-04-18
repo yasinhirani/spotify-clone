@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setAuthData } from "../../features/auth/auth";
 import { setUserPlaylists } from "../../features/userPlaylist/userPlaylist";
 import toast from "react-hot-toast";
+import { setMusicList } from "../../features/musicList/musicList";
 
 interface IProps {
   setLogoutConfirmationOpen: (open: boolean) => void;
@@ -16,6 +17,7 @@ function LogoutConfirmation({ setLogoutConfirmationOpen }: IProps) {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     dispatch(setUserPlaylists(null));
+    dispatch(setMusicList({ currentlyPlaying: null, musicList: [] }));
     toast.success("Logout Successfully");
     setLogoutConfirmationOpen(false);
   };
