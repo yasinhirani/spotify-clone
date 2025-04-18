@@ -69,6 +69,15 @@ function AddSongToPlaylist({ setAddSongModalOpen, selectedSong }: IProps) {
                 </button>
               );
             })}
+            <button
+              className="underline text-white"
+              onClick={() => {
+                setAddSongModalOpen(false);
+                dispatch(setModalOpen(true));
+              }}
+            >
+              Create New Playlist
+            </button>
           </div>
         ) : (
           <h6 className="text-white font-semibold text-lg">

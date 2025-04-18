@@ -178,14 +178,14 @@ function PlaylistDetail() {
               >
                 <PlayIcon className="size-10" />
               </button>
-              {!Object.prototype.hasOwnProperty.call(
+              {/* {!Object.prototype.hasOwnProperty.call(
                 playlistData,
                 "user_id"
               ) && (
                 <button className="text-white">
                   <PlusCircleIcon className="w-10 h-10" />
                 </button>
-              )}
+              )} */}
             </div>
             {/* End play and follow button */}
             {/* Start Popular songs */}
@@ -209,7 +209,7 @@ function PlaylistDetail() {
                   .map((track: any, index: number) => {
                     return (
                       <div
-                        className="flex items-center text-white relative group hover:bg-white hover:bg-opacity-10 p-2 rounded-md transition-colors"
+                        className="flex items-center text-white relative group md:hover:bg-white md:hover:bg-opacity-10 p-2 rounded-md transition-colors"
                         key={`${track.track.id}${index}`}
                       >
                         {musicState.currentlyPlaying &&
@@ -243,7 +243,7 @@ function PlaylistDetail() {
                         {!Object.prototype.hasOwnProperty.call(
                           playlistData,
                           "user_id"
-                        ) && (
+                        ) && authState.authData && (
                           <button
                             className="lg:invisible lg:group-hover:visible ml-4"
                             onClick={() => addSongToPlaylist(track.track)}
