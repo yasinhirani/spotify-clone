@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useGetArtistDetailQuery,
   useGetArtistPopularTracksQuery,
@@ -9,14 +9,12 @@ import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
 import { setMusicList } from "../../features/musicList/musicList";
 import { useDispatch, useSelector } from "react-redux";
-import { FileRoutes } from "../../core/utilities/constants/core.constants";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import AddSongToPlaylist from "../../shared/components/AddSongToPlaylist";
 
 function ArtistDetail() {
   const { artistId } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
   const musicState = useSelector((state: any) => state.MusicList);
