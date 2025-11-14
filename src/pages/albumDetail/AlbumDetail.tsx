@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
@@ -8,14 +8,12 @@ import { ClockIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { extractColors } from "extract-colors";
 import { setMusicList } from "../../features/musicList/musicList";
 import { useDispatch, useSelector } from "react-redux";
-import { FileRoutes } from "../../core/utilities/constants/core.constants";
 import AddSongToPlaylist from "../../shared/components/AddSongToPlaylist";
 
 function AlbumDetail() {
   const { albumId } = useParams();
   const { data: albumDataRes } = useGetAlbumDetailQuery(albumId!);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
   const musicState = useSelector((state: any) => state.MusicList);

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import Loader from "../../shared/components/Loader";
@@ -15,7 +15,6 @@ import {
 import { extractColors } from "extract-colors";
 import { useDispatch, useSelector } from "react-redux";
 import { setMusicList } from "../../features/musicList/musicList";
-import { FileRoutes } from "../../core/utilities/constants/core.constants";
 import AddSongToPlaylist from "../../shared/components/AddSongToPlaylist";
 
 function PlaylistDetail() {
@@ -26,7 +25,6 @@ function PlaylistDetail() {
     isFetching,
   } = useGetPlaylistDetailQuery(playlistId!);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const authState = useSelector((state: any) => state.Auth);
   const musicState = useSelector((state: any) => state.MusicList);
