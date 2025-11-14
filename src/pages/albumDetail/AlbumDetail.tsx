@@ -27,10 +27,10 @@ function AlbumDetail() {
   const [selectedSong, setSelectedSong] = useState<any>(null);
 
   const handleClick = (index: number) => {
-    if (!authState.authData) {
-      navigate(FileRoutes.LOGIN);
-      return;
-    }
+    // if (!authState.authData) {
+    //   navigate(FileRoutes.LOGIN);
+    //   return;
+    // }
 
     const selectedMusic = albumTracks[index];
 
